@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinguaHire Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .app-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+            transition: var(--transition);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h1 i {
+            font-size: 32px;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        select {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            padding-right: 40px;
+            transition: var(--transition);
+        }
+
+        select:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .language-selector::after {
+            content: '\f0ac';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none;
+        }
+
+        .card-content {
+            padding: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-gray);
+        }
+
+        .question {
+            margin-bottom: 30px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateX(5px);
+        }
+
+        .option.selected::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background-color: var(--primary);
+        }
+
+        .option input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .thank-you {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: var(--success);
+            margin-bottom: 25px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .thank-you h2 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 32px;
+        }
+
+        .thank-you p {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .welcome-icon {
+            text-align: center;
+            font-size: 70px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .welcome-description {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--gray);
+        }
+
+        .user-info {
+            background: var(--light);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .user-info h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+        }
+
+        .user-details {
+            display: flex;
+            gap: 15px;
+        }
+
+        .user-detail {
+            flex: 1;
+        }
+
+        .user-detail label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .user-detail p {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .card-content {
+                padding: 25px;
+            }
+            
+            header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .user-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .thank-you {
+                padding: 40px 25px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .navigation button {
+                width: 100%;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .placeholder-language {
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="app-card">
+            <header>
+                <h1><i class="fas fa-globe-americas"></i> <span id="app-title">LinguaHire Quiz</span></h1>
+                <div class="language-selector">
+                    <select id="language-select">
+                        <option value="pt">Português</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                    </select>
+                </div>
+            </header>
+
+            <!-- Tela de boas-vindas e coleta de dados -->
+            <div id="welcome-screen" class="card-content">
+                <div class="welcome-icon floating">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h2 class="welcome-title" id="welcome-title">Bem-vindo ao Quiz LinguaHire</h2>
+                <p class="welcome-description" id="welcome-description">Preencha seus dados abaixo para iniciar o questionário de triagem.</p>
+                
+                <div class="form-group">
+                    <label for="fullname" id="name-label">Nome Completo</label>
+                    <input type="text" id="fullname" placeholder="" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" id="email-label">E-mail</label>
+                    <input type="email" id="email" placeholder="" required>
+                </div>
+                
+                <button id="start-btn" class="btn" disabled>
+                    <i class="fas fa-play-circle"></i>
+                    <span id="start-button-text">Iniciar Quiz</span>
+                </button>
+            </div>
+
+            <!-- Tela do quiz -->
+            <div id="quiz-screen" class="card-content hidden">
+                <div class="user-info">
+                    <h3><i class="fas fa-user"></i> <span id="candidate-info">Informações do Candidato</span></h3>
+                    <div class="user-details">
+                        <div class="user-detail">
+                            <label id="name-label-display">Nome</label>
+                            <p id="user-name-display">-</p>
+                        </div>
+                        <div class="user-detail">
+                            <label id="email-label-display">E-mail</label>
+                            <p id="user-email-display">-</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span id="progress-text">Pergunta 1 de 5</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                </div>
+                
+                <div id="question-container">
+                    <!-- As perguntas serão inseridas aqui dinamicamente -->
+                </div>
+                
+                <div class="navigation">
+                    <button id="prev-btn" class="btn btn-secondary hidden">
+                        <i class="fas fa-arrow-left"></i>
+                        <span id="previous-button-text">Anterior</span>
+                    </button>
+                    <button id="next-btn" class="btn">
+                        <span id="next-button-text">Próxima</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tela de agradecimento -->
+            <div id="thank-you-screen" class="card-content hidden thank-you">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 id="thank-you-title">Obrigado!</h2>
+                <p id="thank-you-message">Agradecemos pela sua participação no nosso processo de seleção. Entraremos em contato em breve.</p>
+                <button id="restart-btn" class="btn">
+                    <i class="fas fa-redo"></i>
+                    <span id="restart-button-text">Realizar Novo Teste</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados do quiz em diferentes idiomas
+        const quizData = {
+            pt: {
+                appTitle: "LinguaHire Quiz",
+                welcomeTitle: "Bem-vindo ao Quiz LinguaHire",
+                welcomeDescription: "Preencha seus dados abaixo para iniciar o questionário de triagem.",
+                nameLabel: "Nome Completo",
+                namePlaceholder: "Digite seu nome completo",
+                emailLabel: "E-mail",
+                emailPlaceholder: "seu.email@exemplo.com",
+                startButton: "Iniciar Quiz",
+                previousButton: "Anterior",
+                nextButton: "Próxima",
+                finishButton: "Finalizar",
+                candidateInfo: "Informações do Candidato",
+                nameLabelDisplay: "Nome",
+                emailLabelDisplay: "E-mail",
+                thankYouTitle: "Obrigado!",
+                thankYouMessage: "Agradecemos pela sua participação no nosso processo de seleção. Entraremos em contato em breve.",
+                restartButton: "Realizar Novo Teste",
+                questions: [
+                    {
+                        question: "Como você lida com prazos apertados?",
+                        options: [
+                            "Planejo com antecedência para evitar pressões de última hora",
+                            "Trabalho bem sob pressão e mantenho o foco",
+                            "Divido o trabalho em partes menores e estabeleço marcos",
+                            "Procuro ajuda da equipe quando necessário"
+                        ]
+                    },
+                    {
+                        question: "Qual sua abordagem para resolver problemas complexos?",
+                        options: [
+                            "Analiso todas as informações disponíveis antes de tomar uma decisão",
+                            "Busco opiniões de colegas com mais experiência",
+                            "Testo diferentes soluções em pequena escala primeiro",
+                            "Uso metodologias estruturadas como análise de causa raiz"
+                        ]
+                    },
+                    {
+                        question: "Como você reage a feedbacks negativos?",
+                        options: [
+                            "Vejo como uma oportunidade de aprendizado e crescimento",
+                            "Reflito sobre os pontos mencionados e busco melhorar",
+                            "Peço exemplos específicos para entender melhor",
+                            "Agradeço o feedback e elaboro um plano de ação"
+                        ]
+                    },
+                    {
+                        question: "Qual sua estratégia para trabalhar em equipe?",
+                        options: [
+                            "Comunicação clara e frequente com todos os membros",
+                            "Definição clara de papéis e responsabilidades",
+                            "Estabelecimento de metas comuns e monitoramento do progresso",
+                            "Criação de um ambiente de confiança e apoio mútuo"
+                        ]
+                    },
+                    {
+                        question: "Como você prioriza tarefas quando tem múltiplas demandas?",
+                        options: [
+                            "Uso uma matriz de urgência/importância para classificar as tarefas",
+                            "Comunico-me com os stakeholders para entender as expectativas",
+                            "Foco primeiro nas tarefas com prazos mais curtos",
+                            "Avalio o impacto de cada tarefa nos objetivos gerais"
+                        ]
+                    }
+                ]
+            },
+            en: {
+                appTitle: "LinguaHire Quiz",
+                welcomeTitle: "Welcome to LinguaHire Quiz",
+                welcomeDescription: "Fill in your details below to start the screening questionnaire.",
+                nameLabel: "Full Name",
+                namePlaceholder: "Enter your full name",
+                emailLabel: "Email",
+                emailPlaceholder: "your.email@example.com",
+                startButton: "Start Quiz",
+                previousButton: "Previous",
+                nextButton: "Next",
+                finishButton: "Finish",
+                candidateInfo: "Candidate Information",
+                nameLabelDisplay: "Name",
+                emailLabelDisplay: "Email",
+                thankYouTitle: "Thank You!",
+                thankYouMessage: "Thank you for participating in our selection process. We will contact you soon.",
+                restartButton: "Take New Test",
+                questions: [
+                    {
+                        question: "How do you handle tight deadlines?",
+                        options: [
+                            "I plan ahead to avoid last-minute pressure",
+                            "I work well under pressure and maintain focus",
+                            "I break the work into smaller parts and set milestones",
+                            "I seek help from the team when necessary"
+                        ]
+                    },
+                    {
+                        question: "What is your approach to solving complex problems?",
+                        options: [
+                            "I analyze all available information before making a decision",
+                            "I seek opinions from more experienced colleagues",
+                            "I test different solutions on a small scale first",
+                            "I use structured methodologies like root cause analysis"
+                        ]
+                    },
+                    {
+                        question: "How do you react to negative feedback?",
+                        options: [
+                            "I see it as a learning and growth opportunity",
+                            "I reflect on the points mentioned and seek to improve",
+                            "I ask for specific examples to better understand",
+                            "I thank for the feedback and develop an action plan"
+                        ]
+                    },
+                    {
+                        question: "What is your strategy for teamwork?",
+                        options: [
+                            "Clear and frequent communication with all members",
+                            "Clear definition of roles and responsibilities",
+                            "Establishment of common goals and progress monitoring",
+                            "Creating an environment of trust and mutual support"
+                        ]
+                    },
+                    {
+                        question: "How do you prioritize tasks when you have multiple demands?",
+                        options: [
+                            "I use an urgency/importance matrix to classify tasks",
+                            "I communicate with stakeholders to understand expectations",
+                            "I focus first on tasks with shorter deadlines",
+                            "I evaluate the impact of each task on overall goals"
+                        ]
+                    }
+                ]
+            },
+            es: {
+                appTitle: "LinguaHire Quiz",
+                welcomeTitle: "Bienvenido al Quiz LinguaHire",
+                welcomeDescription: "Complete sus datos a continuación para comenzar el cuestionario de selección.",
+                nameLabel: "Nombre Completo",
+                namePlaceholder: "Ingrese su nombre completo",
+                emailLabel: "Correo Electrónico",
+                emailPlaceholder: "su.correo@ejemplo.com",
+                startButton: "Comenzar Quiz",
+                previousButton: "Anterior",
+                nextButton: "Siguiente",
+                finishButton: "Finalizar",
+                candidateInfo: "Información del Candidato",
+                nameLabelDisplay: "Nombre",
+                emailLabelDisplay: "Correo Electrónico",
+                thankYouTitle: "¡Gracias!",
+                thankYouMessage: "Agradecemos su participación en nuestro proceso de selección. Nos pondremos en contacto pronto.",
+                restartButton: "Realizar Nueva Prueba",
+                questions: [
+                    {
+                        question: "¿Cómo manejas los plazos ajustados?",
+                        options: [
+                            "Planeo con anticipación para evitar presiones de última hora",
+                            "Trabajo bien bajo presión y mantengo el enfoque",
+                            "Divido el trabajo en partes más pequeñas y establezco hitos",
+                            "Busco ayuda del equipo cuando es necesario"
+                        ]
+                    },
+                    {
+                        question: "¿Cuál es tu enfoque para resolver problemas complejos?",
+                        options: [
+                            "Analizo toda la información disponible antes de tomar una decisión",
+                            "Busco opiniones de colegas con más experiencia",
+                            "Pruebo diferentes soluciones a pequeña escala primero",
+                            "Uso metodologías estructuradas como análisis de causa raíz"
+                        ]
+                    },
+                    {
+                        question: "¿Cómo reaccionas a los comentarios negativos?",
+                        options: [
+                            "Lo veo como una oportunidad de aprendizaje y crecimiento",
+                            "Reflexiono sobre los puntos mencionados y busco mejorar",
+                            "Pido ejemplos específicos para entender mejor",
+                            "Agradezco los comentarios y elaboro un plan de acción"
+                        ]
+                    },
+                    {
+                        question: "¿Cuál es tu estrategia para trabajar en equipo?",
+                        options: [
+                            "Comunicación clara y frecuente con todos los miembros",
+                            "Definición clara de roles y responsabilidades",
+                            "Establecimiento de metas comunes y seguimiento del progreso",
+                            "Creación de un ambiente de confianza y apoyo mutuo"
+                        ]
+                    },
+                    {
+                        question: "¿Cómo priorizas las tareas cuando tienes múltiples demandas?",
+                        options: [
+                            "Uso una matriz de urgencia/importancia para clasificar las tareas",
+                            "Me comunico con las partes interesadas para entender las expectativas",
+                            "Me enfoco primero en las tareas con plazos más cortos",
+                            "Evalúo el impacto de cada tarea en los objetivos generales"
+                        ]
+                    }
+                ]
+            },
+            fr: {
+                appTitle: "LinguaHire Quiz",
+                welcomeTitle: "Bienvenue au Quiz LinguaHire",
+                welcomeDescription: "Remplissez vos informations ci-dessous pour commencer le questionnaire de sélection.",
+                nameLabel: "Nom Complet",
+                namePlaceholder: "Entrez votre nom complet",
+                emailLabel: "E-mail",
+                emailPlaceholder: "votre.email@exemple.com",
+                startButton: "Commencer le Quiz",
+                previousButton: "Précédent",
+                nextButton: "Suivant",
+                finishButton: "Terminer",
+                candidateInfo: "Informations du Candidat",
+                nameLabelDisplay: "Nom",
+                emailLabelDisplay: "E-mail",
+                thankYouTitle: "Merci!",
+                thankYouMessage: "Nous vous remercions de votre participation à notre processus de sélection. Nous vous contacterons bientôt.",
+                restartButton: "Refaire le Test",
+                questions: [
+                    {
+                        question: "Comment gérez-vous les délais serrés?",
+                        options: [
+                            "Je planifie à l'avance pour éviter les pressions de dernière minute",
+                            "Je travaille bien sous pression et garde le focus",
+                            "Je divise le travail en parties plus petites et établis des jalons",
+                            "Je demande de l'aide à l'équipe si nécessaire"
+                        ]
+                    },
+                    {
+                        question: "Quelle est votre approche pour résoudre des problèmes complexes?",
+                        options: [
+                            "J'analyse toutes les informations disponibles avant de prendre une décision",
+                            "Je cherche les opinions de collègues plus expérimentés",
+                            "Je teste d'abord différentes solutions à petite échelle",
+                            "J'utilise des méthodologies structurées comme l'analyse des causes racines"
+                        ]
+                    },
+                    {
+                        question: "Comment réagissez-vous aux commentaires négatifs?",
+                        options: [
+                            "Je les vois comme une opportunité d'apprentissage et de croissance",
+                            "Je réfléchis aux points mentionnés et cherche à m'améliorer",
+                            "Je demande des exemples spécifiques pour mieux comprendre",
+                            "Je remercie pour les commentaires et élabore un plan d'action"
+                        ]
+                    },
+                    {
+                        question: "Quelle est votre stratégie pour travailler en équipe?",
+                        options: [
+                            "Communication claire et fréquente avec tous les membres",
+                            "Définition claire des rôles et responsabilités",
+                            "Établissement d'objectifs communs et suivi des progrès",
+                            "Création d'un environnement de confiance et de soutien mutuel"
+                        ]
+                    },
+                    {
+                        question: "Comment priorisez-vous les tâches lorsque vous avez de multiples demandes?",
+                        options: [
+                            "J'utilise une matrice urgence/importance pour classer les tâches",
+                            "Je communique avec les parties prenantes pour comprendre leurs attentes",
+                            "Je me concentre d'abord sur les tâches avec les délais les plus courts",
+                            "J'évalue l'impact de chaque tâche sur les objectifs globaux"
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Estado do aplicativo
+        let currentLanguage = 'pt';
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let userData = {};
+
+        // Elementos da DOM
+        const languageSelect = document.getElementById('language-select');
+        const appTitle = document.getElementById('app-title');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const welcomeTitle = document.getElementById('welcome-title');
+        const welcomeDescription = document.getElementById('welcome-description');
+        const nameLabel = document.getElementById('name-label');
+        const emailLabel = document.getElementById('email-label');
+        const fullnameInput = document.getElementById('fullname');
+        const emailInput = document.getElementById('email');
+        const startButton = document.getElementById('start-btn');
+        const startButtonText = document.getElementById('start-button-text');
+        const quizScreen = document.getElementById('quiz-screen');
+        const candidateInfo = document.getElementById('candidate-info');
+        const nameLabelDisplay = document.getElementById('name-label-display');
+        const emailLabelDisplay = document.getElementById('email-label-display');
+        const userNameDisplay = document.getElementById('user-name-display');
+        const userEmailDisplay = document.getElementById('user-email-display');
+        const questionContainer = document.getElementById('question-container');
+        const prevButton = document.getElementById('prev-btn');
+        const prevButtonText = document.getElementById('previous-button-text');
+        const nextButton = document.getElementById('next-btn');
+        const nextButtonText = document.getElementById('next-button-text');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const progressPercent = document.getElementById('progress-percent');
+        const thankYouScreen = document.getElementById('thank-you-screen');
+        const thankYouTitle = document.getElementById('thank-you-title');
+        const thankYouMessage = document.getElementById('thank-you-message');
+        const restartButton = document.getElementById('restart-btn');
+        const restartButtonText = document.getElementById('restart-button-text');
+
+        // Detectar idioma do navegador
+        function detectBrowserLanguage() {
+            // Obter idioma do navegador
+            const browserLang = navigator.language || navigator.userLanguage;
+            console.log("Idioma do navegador detectado:", browserLang);
+            
+            // Simplificar para código de 2 letras (pt, en, es, fr)
+            const langCode = browserLang.split('-')[0];
+            
+            // Verificar se temos suporte para o idioma detectado
+            if (quizData[langCode]) {
+                console.log("Idioma suportado encontrado:", langCode);
+                return langCode;
+            }
+            
+            console.log("Idioma não suportado, usando padrão: pt");
+            return 'pt'; // Idioma padrão
+        }
+
+        // Atualizar interface com base no idioma selecionado
+        function updateInterface() {
+            const data = quizData[currentLanguage];
+            
+            // Atualizar textos da interface
+            appTitle.textContent = data.appTitle;
+            welcomeTitle.textContent = data.welcomeTitle;
+            welcomeDescription.textContent = data.welcomeDescription;
+            nameLabel.textContent = data.nameLabel;
+            emailLabel.textContent = data.emailLabel;
+            fullnameInput.placeholder = data.namePlaceholder;
+            emailInput.placeholder = data.emailPlaceholder;
+            startButtonText.textContent = data.startButton;
+            candidateInfo.textContent = data.candidateInfo;
+            nameLabelDisplay.textContent = data.nameLabelDisplay;
+            emailLabelDisplay.textContent = data.emailLabelDisplay;
+            prevButtonText.textContent = data.previousButton;
+            nextButtonText.textContent = currentQuestion === data.questions.length - 1 ? data.finishButton : data.nextButton;
+            thankYouTitle.textContent = data.thankYouTitle;
+            thankYouMessage.textContent = data.thankYouMessage;
+            restartButtonText.textContent = data.restartButton;
+            
+            // Atualizar opção selecionada no dropdown
+            languageSelect.value = currentLanguage;
+            
+            // Atualizar textos de progresso
+            updateProgressText();
+            
+            // Se estivermos no quiz, atualizar as perguntas
+            if (!quizScreen.classList.contains('hidden')) {
+                displayQuestion();
+            }
+        }
+
+        // Atualizar texto de progresso
+        function updateProgressText() {
+            const data = quizData[currentLanguage];
+            const totalQuestions = data.questions.length;
+            const percent = Math.round(((currentQuestion + 1) / totalQuestions) * 100);
+            
+            // Textos para a barra de progresso em diferentes idiomas
+            const questionTexts = {
+                'pt': 'Pergunta',
+                'en': 'Question',
+                'es': 'Pregunta',
+                'fr': 'Question'
+            };
+            
+            const ofTexts = {
+                'pt': 'de',
+                'en': 'of',
+                'es': 'de',
+                'fr': 'sur'
+            };
+            
+            progressText.textContent = `${questionTexts[currentLanguage]} ${currentQuestion + 1} ${ofTexts[currentLanguage]} ${totalQuestions}`;
+            progressPercent.textContent = `${percent}%`;
+        }
+
+        // Exibir pergunta atual
+        function displayQuestion() {
+            const data = quizData[currentLanguage];
+            const question = data.questions[currentQuestion];
+            
+            // Atualizar barra de progresso
+            const progressWidth = ((currentQuestion + 1) / data.questions.length) * 100;
+            progressBar.style.width = `${progressWidth}%`;
+            updateProgressText();
+            
+            // Textos para o número da pergunta em diferentes idiomas
+            const questionNumberTexts = {
+                'pt': 'Pergunta',
+                'en': 'Question',
+                'es': 'Pregunta',
+                'fr': 'Question'
+            };
+            
+            // Construir HTML da pergunta
+            let questionHTML = `
+                <div class="question">
+                    <div class="question-number">
+                        <i class="fas fa-question-circle"></i>
+                        ${questionNumberTexts[currentLanguage]} ${currentQuestion + 1}
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+            `;
+            
+            // Adicionar opções de resposta
+            question.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestion] === index;
+                questionHTML += `
+                    <div class="option ${isSelected ? 'selected' : ''}" data-index="${index}">
+                        <input type="radio" name="answer" id="option-${index}" ${isSelected ? 'checked' : ''}>
+                        <label for="option-${index}">${option}</label>
+                    </div>
+                `;
+            });
+            
+            questionHTML += `</div></div>`;
+            questionContainer.innerHTML = questionHTML;
+            
+            // Atualizar estado dos botões de navegação
+            prevButton.classList.toggle('hidden', currentQuestion === 0);
+            nextButtonText.textContent = currentQuestion === data.questions.length - 1 ? data.finishButton : data.nextButton;
+            
+            // Adicionar event listeners às opções
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const selectedIndex = parseInt(option.getAttribute('data-index'));
+                    userAnswers[currentQuestion] = selectedIndex;
+                    
+                    // Atualizar visualmente a seleção
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+                    document.getElementById(`option-${selectedIndex}`).checked = true;
+                });
+            });
+        }
+
+        // Validar campos de entrada
+        function validateInputs() {
+            const nameValid = fullnameInput.value.trim().length > 0;
+            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+            
+            startButton.disabled = !(nameValid && emailValid);
+        }
+
+        // Transição entre telas com animação
+        function transitionScreens(fromScreen, toScreen) {
+            fromScreen.classList.add('fade-out');
+            setTimeout(() => {
+                fromScreen.classList.add('hidden');
+                fromScreen.classList.remove('fade-out');
+                toScreen.classList.remove('hidden');
+            }, 300);
+        }
+
+        // Mensagem de alerta traduzida
+        function showAlert() {
+            const alertTexts = {
+                'pt': 'Por favor, selecione uma resposta antes de continuar.',
+                'en': 'Please select an answer before proceeding.',
+                'es': 'Por favor, seleccione una respuesta antes de continuar.',
+                'fr': 'Veuillez sélectionner une réponse avant de continuer.'
+            };
+            
+            alert(alertTexts[currentLanguage]);
+        }
+
+        // Inicializar aplicativo
+        function initApp() {
+            // Detectar idioma do navegador
+            currentLanguage = detectBrowserLanguage();
+            console.log("Idioma selecionado:", currentLanguage);
+            updateInterface();
+            
+            // Event listeners
+            languageSelect.addEventListener('change', () => {
+                currentLanguage = languageSelect.value;
+                console.log("Idioma alterado para:", currentLanguage);
+                updateInterface();
+            });
+            
+            fullnameInput.addEventListener('input', validateInputs);
+            emailInput.addEventListener('input', validateInputs);
+            
+            startButton.addEventListener('click', () => {
+                // Salvar dados do usuário
+                userData = {
+                    name: fullnameInput.value.trim(),
+                    email: emailInput.value.trim()
+                };
+                
+                // Exibir dados do usuário na tela do quiz
+                userNameDisplay.textContent = userData.name;
+                userEmailDisplay.textContent = userData.email;
+                
+                // Inicializar array de respostas
+                userAnswers = new Array(quizData[currentLanguage].questions.length).fill(null);
+                
+                // Mostrar tela do quiz
+                transitionScreens(welcomeScreen, quizScreen);
+                
+                // Exibir primeira pergunta
+                displayQuestion();
+            });
+            
+            prevButton.addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    displayQuestion();
+                }
+            });
+            
+            nextButton.addEventListener('click', () => {
+                const data = quizData[currentLanguage];
+                
+                // Verificar se a pergunta atual foi respondida
+                if (userAnswers[currentQuestion] === null) {
+                    showAlert();
+                    return;
+                }
+                
+                if (currentQuestion < data.questions.length - 1) {
+                    currentQuestion++;
+                    displayQuestion();
+                } else {
+                    // Finalizar quiz
+                    transitionScreens(quizScreen, thankYouScreen);
+                    
+                    // Aqui você poderia enviar os dados para um servidor
+                    console.log('Dados do usuário:', userData);
+                    console.log('Respostas:', userAnswers);
+					
+					  window.location.href = "index.html";
+					  
+                }
+            });
+            
+            restartButton.addEventListener('click', () => {
+                // Resetar estado do aplicativo
+                currentQuestion = 0;
+                userAnswers = [];
+                userData = {};
+                fullnameInput.value = '';
+                emailInput.value = '';
+                startButton.disabled = true;
+                
+                // Voltar para a tela inicial
+                transitionScreens(thankYouScreen, welcomeScreen);
+            });
+        }
+
+        // Iniciar aplicativo quando a página carregar
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

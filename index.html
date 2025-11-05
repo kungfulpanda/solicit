@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Careers - Candidate-se</title>
+
+  <!-- Icons & Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #7C3AED;
+      --secondary: #8B5CF6;
+      --accent: #A78BFA;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --dark: #1E1B4B;
+      --light: #FFFFFF;
+      --gray: #F8FAFC;
+      --text: #334155;
+      --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+      --gradient-accent: linear-gradient(135deg, var(--secondary), var(--accent));
+      --shadow: 0 10px 30px rgba(124, 58, 237, 0.15);
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container { 
+      width: 100%; 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      padding: 0 20px; 
+    }
+
+    /* Header */
+    header {
+      padding: 20px 0;
+      background-color: var(--light);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-content { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+
+    .logo { 
+      font-size: 28px; 
+      font-weight: 700; 
+      background: var(--gradient); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+    }
+
+    .btn { 
+      display: inline-block; 
+      padding: 12px 28px; 
+      border-radius: 8px; 
+      text-decoration: none; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all .3s ease; 
+      border: none; 
+      font-size: 16px; 
+    }
+    .btn-primary { 
+      background: var(--gradient); 
+      color: white; 
+      box-shadow: var(--shadow); 
+    }
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 15px 30px rgba(124, 58, 237, 0.25); 
+    }
+    .btn-outline { 
+      background: transparent; 
+      color: var(--primary); 
+      border: 2px solid var(--primary); 
+    }
+    .btn-outline:hover { 
+      background: var(--primary); 
+      color: white; 
+    }
+    .btn-sm { padding: 8px 16px; font-size: 14px; }
+
+    /* Language Selector */
+    .language-selector { 
+      margin-left: 20px; 
+      position: relative; 
+    }
+    .language-selector select {
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 40px 0;
+      min-height: calc(100vh - 160px);
+    }
+
+    .job-header {
+      background: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+      text-align: center;
+    }
+
+    .job-title {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .job-subtitle {
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    .job-meta {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .meta-item i {
+      color: var(--primary);
+    }
+
+    .job-tags {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--gray);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    /* Form Container */
+    .form-container {
+      background: white;
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+    }
+
+    .form-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-title h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .form-progress {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      position: relative;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .form-progress::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #e2e8f0;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .progress-step {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s;
+    }
+
+    .progress-step.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .progress-step.completed {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .form-control.error {
+      border-color: var(--error);
+    }
+
+    /* Document Upload Sections */
+    .upload-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .upload-section h4 {
+      margin-bottom: 15px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upload-section h4 i {
+      color: var(--primary);
+    }
+
+    .file-upload {
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .file-upload:hover {
+      border-color: var(--primary);
+      background: #faf5ff;
+    }
+
+    .file-upload i {
+      font-size: 48px;
+      color: #cbd5e1;
+      margin-bottom: 15px;
+    }
+
+    .file-upload input {
+      display: none;
+    }
+
+    .file-preview {
+      margin-top: 15px;
+      text-align: center;
+      display: none;
+    }
+
+    .file-preview img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .file-info {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .file-requirements {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 10px;
+    }
+
+    /* Photo Instructions */
+    .photo-instructions {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .photo-requirement {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .photo-requirement i {
+      margin-right: 8px;
+      color: var(--primary);
+      font-size: 12px;
+    }
+
+    /* Loading */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Country Specific Fields */
+    .country-specific {
+      display: none;
+    }
+
+    .country-specific.active {
+      display: block;
+    }
+
+    /* Skills and Languages Tags */
+    .skills-container, .languages-container, .institutions-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .skill-tag, .language-tag, .institution-tag {
+      background: var(--gradient);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .skill-tag i, .language-tag i, .institution-tag i {
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* Success Message */
+    .success-message {
+      text-align: center;
+      padding: 60px 40px;
+      display: none;
+    }
+
+    .success-icon {
+      font-size: 80px;
+      color: var(--success);
+      margin-bottom: 20px;
+    }
+
+    /* Camera Modal */
+    .camera-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .camera-container {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .camera-preview {
+      width: 100%;
+      max-height: 400px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #000;
+    }
+
+    .camera-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .camera-switch {
+      margin-top: 10px;
+    }
+
+    /* Upload Options */
+    .upload-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .upload-option-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .upload-option-btn.active {
+      border-color: var(--primary);
+      background: #faf5ff;
+    }
+
+    .upload-option-btn i {
+      margin-right: 8px;
+      color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .form-container {
+        padding: 25px;
+      }
+      
+      .job-meta {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .form-progress {
+        max-width: 300px;
+      }
+      
+      .upload-options {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-footer {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .job-title {
+        font-size: 1.5rem;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .language-selector {
+        margin-left: 0;
+      }
+      
+      .camera-controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">Global Careers</div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <div class="language-selector">
+            <select id="language-select">
+              <option value="pt">🇧🇷 Português</option>
+              <option value="en">🇺🇸 English</option>
+              <option value="es">🇪🇸 Español</option>
+            </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <!-- Application Form -->
+      <div class="form-container">
+        <div class="form-title">
+          <h1 data-i18n="form-title">Candidate-se Agora</h1>
+          <p data-i18n="form-subtitle">Preencha o formulário abaixo para se candidatar às nossas vagas globais</p>
+        </div>
+
+        <div class="form-progress">
+          <div class="progress-step completed">1</div>
+          <div class="progress-step active">2</div>
+          <div class="progress-step">3</div>
+          <div class="progress-step">4</div>
+        </div>
+
+        <form id="job-application-form">
+          <!-- Step 1: Personal Info -->
+          <div class="form-step active" id="step-1">
+            <h3 style="margin-bottom: 25px;" data-i18n="personal-info">Informações Pessoais</h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullName" data-i18n="full-name">Nome Completo *</label>
+                <input type="text" id="fullName" class="form-control" required>
+                <div class="error-message" data-i18n="error-name">Por favor, informe seu nome completo</div>
+              </div>
+              <div class="form-group">
+                <label for="email" data-i18n="email">Email *</label>
+                <input type="email" id="email" class="form-control" required>
+                <div class="error-message" data-i18n="error-email">Por favor, informe um email válido</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone" data-i18n="phone">Telefone *</label>
+                <input type="tel" id="phone" class="form-control" required>
+                <div class="error-message" data-i18n="error-phone">Por favor, informe um telefone válido</div>
+              </div>
+              <div class="form-group">
+                <label for="cellphone" data-i18n="cellphone">Celular *</label>
+                <input type="tel" id="cellphone" class="form-control" required>
+                <div class="error-message" data-i18n="error-cellphone">Por favor, informe um celular válido</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="country" data-i18n="country">País *</label>
+                <select id="country" class="form-control" required>
+                  <option value="" data-i18n="select-country">Selecione seu país</option>
+                  <option value="BR">Brasil</option>
+                  <option value="US">Estados Unidos</option>
+                  <option value="CA">Canadá</option>
+                  <option value="UK">Reino Unido</option>
+                  <option value="DE">Alemanha</option>
+                  <option value="FR">França</option>
+                  <option value="ES">Espanha</option>
+                  <option value="PT">Portugal</option>
+                  <option value="MX">México</option>
+                  <option value="AR">Argentina</option>
+                  <option value="CO">Colômbia</option>
+                  <option value="AU">Austrália</option>
+                  <option value="JP">Japão</option>
+                  <option value="KR">Coreia do Sul</option>
+                  <option value="SG">Singapura</option>
+                  <option value="ZA">África do Sul</option>
+                </select>
+                <div class="error-message" data-i18n="error-country">Por favor, selecione seu país</div>
+              </div>
+              <div class="form-group">
+                <label for="birthdate" data-i18n="birthdate">Data de Nascimento *</label>
+                <input type="date" id="birthdate" class="form-control" required>
+                <div class="error-message" data-i18n="error-birthdate">Por favor, informe sua data de nascimento</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nationality" data-i18n="nationality">Nacionalidade *</label>
+                <input type="text" id="nationality" class="form-control" required>
+                <div class="error-message" data-i18n="error-nationality">Por favor, informe sua nacionalidade</div>
+              </div>
+            </div>
+
+            <!-- Country Specific Fields -->
+            <div class="country-specific" id="br-fields">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="cpf">CPF *</label>
+                  <input type="text" id="cpf" class="form-control" placeholder="000.000.000-00">
+                  <div class="error-message">Por favor, informe seu CPF</div>
+                </div>
+                <div class="form-group">
+                  <label for="rg">RG</label>
+                  <input type="text" id="rg" class="form-control" placeholder="Número do RG">
+                </div>
+              </div>
+            </div>
+
+            <div class="country-specific" id="us-fields">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="ssn">Social Security Number (SSN) *</label>
+                  <input type="text" id="ssn" class="form-control" placeholder="XXX-XX-XXXX">
+                  <div class="error-message">Por favor, informe seu SSN</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <div></div>
+              <button type="button" class="btn btn-primary next-step" data-i18n="next">Próximo</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Address Info -->
+          <div class="form-step" id="step-2">
+            <h3 style="margin-bottom: 25px;" data-i18n="address-info">Informações de Endereço</h3>
+
+            <div class="form-group">
+              <label for="address" data-i18n="address">Endereço Completo *</label>
+              <input type="text" id="address" class="form-control" placeholder="Rua, número, bairro" required>
+              <div class="error-message" data-i18n="error-address">Por favor, informe seu endereço completo</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city" data-i18n="city">Cidade *</label>
+                <input type="text" id="city" class="form-control" required>
+                <div class="error-message" data-i18n="error-city">Por favor, informe sua cidade</div>
+              </div>
+              <div class="form-group">
+                <label for="state" data-i18n="state">Estado/Província *</label>
+                <input type="text" id="state" class="form-control" required>
+                <div class="error-message" data-i18n="error-state">Por favor, informe seu estado/província</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="zipcode" data-i18n="zipcode">CEP *</label>
+                <input type="text" id="zipcode" class="form-control" required>
+                <div class="error-message" data-i18n="error-zipcode">Por favor, informe seu CEP</div>
+              </div>
+              <div class="form-group">
+                <label for="complement" data-i18n="complement">Complemento</label>
+                <input type="text" id="complement" class="form-control" placeholder="Apartamento, bloco, etc.">
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <button type="button" class="btn btn-outline prev-step" data-i18n="back">Voltar</button>
+              <button type="button" class="btn btn-primary next-step" data-i18n="next">Próximo</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Professional Info -->
+          <div class="form-step" id="step-3">
+            <h3 style="margin-bottom: 25px;" data-i18n="professional-info">Informações Profissionais</h3>
+
+            <div class="form-group">
+              <label for="positionInterest" data-i18n="position-interest">Área de Interesse *</label>
+              <select id="positionInterest" class="form-control" required>
+                <option value="" data-i18n="select-position">Selecione sua área de interesse</option>
+                <option value="technology" data-i18n="tech">Tecnologia & TI</option>
+                <option value="marketing" data-i18n="marketing">Marketing & Vendas</option>
+                <option value="finance" data-i18n="finance">Finanças & Contabilidade</option>
+                <option value="hr" data-i18n="hr">Recursos Humanos</option>
+                <option value="operations" data-i18n="operations">Operações & Logística</option>
+                <option value="design" data-i18n="design">Design & Criatividade</option>
+                <option value="engineering" data-i18n="engineering">Engenharia</option>
+                <option value="health" data-i18n="health">Saúde & Medicina</option>
+                <option value="education" data-i18n="education">Educação</option>
+                <option value="other" data-i18n="other">Outra</option>
+              </select>
+              <div class="error-message" data-i18n="error-position">Por favor, selecione uma área de interesse</div>
+            </div>
+
+            <!-- NOVO CAMPO: Situação de Emprego -->
+            <div class="form-group">
+              <label for="employmentStatus" data-i18n="employment-status">Situação de Emprego *</label>
+              <select id="employmentStatus" class="form-control" required>
+                <option value="" data-i18n="select-employment">Selecione sua situação</option>
+                <option value="employed" data-i18n="employed">Empregado</option>
+                <option value="unemployed" data-i18n="unemployed">Desempregado</option>
+                <option value="self-employed" data-i18n="self-employed">Autônomo</option>
+                <option value="student" data-i18n="student">Estudante</option>
+                <option value="other" data-i18n="other-employment">Outra</option>
+              </select>
+              <div class="error-message" data-i18n="error-employment">Por favor, selecione sua situação de emprego</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="currentJob" data-i18n="current-job">Profissão Atual/Anterior *</label>
+                <input type="text" id="currentJob" class="form-control" placeholder="Sua profissão atual ou mais recente" required>
+                <div class="error-message" data-i18n="error-current-job">Por favor, informe sua profissão</div>
+              </div>
+              <div class="form-group">
+                <label for="currentSalary" data-i18n="current-salary">Salário Atual/Anterior *</label>
+                <input type="text" id="currentSalary" class="form-control" placeholder="R$ 0,00 ou USD 0.00" required>
+                <div class="error-message" data-i18n="error-current-salary">Por favor, informe seu salário</div>
+              </div>
+            </div>
+
+            <!-- NOVO CAMPO: Histórico de Instituições -->
+            <div class="form-group">
+              <label for="institutions" data-i18n="institutions">Últimas Instituições *</label>
+              <div class="form-row">
+                <input type="text" id="institution-input" class="form-control" placeholder="Ex: Empresa X, Empresa Y" data-i18n-ph="institution-placeholder">
+                <button type="button" class="btn btn-outline" id="add-institution">
+                  <i class="fas fa-plus"></i> <span data-i18n="add">Adicionar</span>
+                </button>
+              </div>
+              <div class="institutions-container" id="institutions-container"></div>
+              <div class="error-message" id="institutions-error" data-i18n="error-institutions">Por favor, adicione pelo menos uma instituição</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="experience" data-i18n="experience">Experiência Profissional *</label>
+                <select id="experience" class="form-control" required>
+                  <option value="" data-i18n="select-experience">Selecione sua experiência</option>
+                  <option value="entry" data-i18n="entry-level">Iniciante (0-2 anos)</option>
+                  <option value="junior" data-i18n="junior">Júnior (2-4 anos)</option>
+                  <option value="mid" data-i18n="mid-level">Pleno (4-6 anos)</option>
+                  <option value="senior" data-i18n="senior">Sênior (6-10 anos)</option>
+                  <option value="lead" data-i18n="lead">Liderança (10+ anos)</option>
+                </select>
+                <div class="error-message" data-i18n="error-experience">Por favor, selecione sua experiência</div>
+              </div>
+              <div class="form-group">
+                <label for="education" data-i18n="education">Escolaridade *</label>
+                <select id="education" class="form-control" required>
+                  <option value="" data-i18n="select-education">Selecione sua escolaridade</option>
+                  <option value="high-school" data-i18n="high-school">Ensino Médio</option>
+                  <option value="technical" data-i18n="technical">Técnico</option>
+                  <option value="bachelor" data-i18n="bachelor">Bacharelado</option>
+                  <option value="master" data-i18n="master">Mestrado</option>
+                  <option value="phd" data-i18n="phd">Doutorado</option>
+                </select>
+                <div class="error-message" data-i18n="error-education">Por favor, selecione sua escolaridade</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="languages" data-i18n="languages">Idiomas *</label>
+              <div class="form-row">
+                <select id="language-selector" class="form-control" style="flex: 2;">
+                  <option value="" data-i18n="select-language">Selecione um idioma</option>
+                  <option value="portuguese" data-i18n="portuguese">Português</option>
+                  <option value="english" data-i18n="english">Inglês</option>
+                  <option value="spanish" data-i18n="spanish">Espanhol</option>
+                  <option value="french" data-i18n="french">Francês</option>
+                  <option value="german" data-i18n="german">Alemão</option>
+                  <option value="italian" data-i18n="italian">Italiano</option>
+                  <option value="japanese" data-i18n="japanese">Japonês</option>
+                  <option value="mandarin" data-i18n="mandarin">Mandarim</option>
+                </select>
+                <select id="language-level" class="form-control" style="flex: 1;">
+                  <option value="" data-i18n="select-level">Nível</option>
+                  <option value="basic" data-i18n="basic">Básico</option>
+                  <option value="intermediate" data-i18n="intermediate">Intermediário</option>
+                  <option value="advanced" data-i18n="advanced">Avançado</option>
+                  <option value="fluent" data-i18n="fluent">Fluente</option>
+                  <option value="native" data-i18n="native">Nativo</option>
+                </select>
+                <button type="button" class="btn btn-outline" id="add-language">
+                  <i class="fas fa-plus"></i> <span data-i18n="add">Adicionar</span>
+                </button>
+              </div>
+              <div class="languages-container" id="languages-container"></div>
+              <div class="error-message" id="languages-error" data-i18n="error-languages">Por favor, adicione pelo menos um idioma</div>
+            </div>
+
+            <div class="form-group">
+              <label for="skills" data-i18n="skills">Habilidades Técnicas</label>
+              <div class="form-row">
+                <input type="text" id="skill-input" class="form-control" placeholder="Ex: JavaScript, React, Node.js" data-i18n-ph="skill-placeholder">
+                <button type="button" class="btn btn-outline" id="add-skill">
+                  <i class="fas fa-plus"></i> <span data-i18n="add">Adicionar</span>
+                </button>
+              </div>
+              <div class="skills-container" id="skills-container"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="coverLetter" data-i18n="cover-letter">Carta de Apresentação</label>
+              <textarea id="coverLetter" class="form-control" placeholder="Conte um pouco sobre você, suas experiências e por que você seria uma boa adição para nossa equipe global..." data-i18n-ph="cover-letter-placeholder"></textarea>
+            </div>
+
+            <div class="form-footer">
+              <button type="button" class="btn btn-outline prev-step" data-i18n="back">Voltar</button>
+              <button type="button" class="btn btn-primary next-step" data-i18n="next">Próximo</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Documents -->
+          <div class="form-step" id="step-4">
+            <h3 style="margin-bottom: 25px;" data-i18n="documents">Documentos</h3>
+
+            <!-- Currículo -->
+            <div class="upload-section">
+              <h4><i class="fas fa-file-pdf"></i> <span data-i18n="resume">Currículo (PDF)</span> *</h4>
+              <div class="photo-instructions">
+                <div class="photo-requirement">
+                  <i class="fas fa-info-circle"></i>
+                  <span data-i18n="resume-instruction">Envie seu currículo atualizado em formato PDF</span>
+                </div>
+                <div class="photo-requirement">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <span data-i18n="max-size">Tamanho máximo: 5MB</span>
+                </div>
+              </div>
+              
+              <div class="file-upload" id="resume-upload">
+                <i class="fas fa-file-upload"></i>
+                <p data-i18n="click-to-upload-resume">Clique para enviar seu currículo</p>
+                <input type="file" id="resume" accept=".pdf,.doc,.docx">
+              </div>
+              
+              <div class="file-preview" id="resume-preview">
+                <div class="file-info">
+                  <i class="fas fa-file-pdf"></i>
+                  <span id="resume-name"></span>
+                  <div class="file-requirements" data-i18n="resume-uploaded">Currículo anexado com sucesso</div>
+                </div>
+              </div>
+              <div class="error-message" data-i18n="error-resume">Por favor, envie seu currículo</div>
+            </div>
+
+            <!-- Documento de Identidade (Frente) -->
+            <div class="upload-section">
+              <h4><i class="fas fa-id-card"></i> <span data-i18n="id-front">Documento de Identidade (Frente)</span> *</h4>
+              <div class="photo-instructions">
+                <div class="photo-requirement">
+                  <i class="fas fa-camera"></i>
+                  <span data-i18n="id-front-instruction">Foto nítida da FRENTE do seu documento de identidade</span>
+                </div>
+                <div class="photo-requirement">
+                  <i class="fas fa-lightbulb"></i>
+                  <span data-i18n="ensure-readable">Certifique-se que todos os dados estejam legíveis</span>
+                </div>
+              </div>
+              
+              <!-- Opções de Upload -->
+              <div class="upload-options">
+                <div class="upload-option-btn active" id="upload-front-option">
+                  <i class="fas fa-upload"></i> <span data-i18n="upload">Upload</span>
+                </div>
+                <div class="upload-option-btn" id="camera-front-option">
+                  <i class="fas fa-camera"></i> <span data-i18n="take-photo">Tirar Foto</span>
+                </div>
+              </div>
+              
+              <!-- Upload por arquivo -->
+              <div class="file-upload" id="doc-front-upload">
+                <i class="fas fa-id-card"></i>
+                <p data-i18n="click-to-upload-front">Clique para enviar frente do documento</p>
+                <input type="file" id="docFront" accept="image/*">
+              </div>
+              
+              <!-- Upload por câmera -->
+              <div class="camera-upload" id="doc-front-camera" style="display: none;">
+                <div class="file-upload" id="doc-front-camera-btn">
+                  <i class="fas fa-camera"></i>
+                  <p data-i18n="click-to-take-photo">Clique para tirar uma foto</p>
+                </div>
+              </div>
+              
+              <div class="file-preview" id="doc-front-preview">
+                <img id="doc-front-preview-img" src="#" alt="Frente do Documento">
+                <div class="file-info" id="doc-front-name"></div>
+              </div>
+              <div class="error-message" data-i18n="error-id-front">Por favor, envie a foto da frente do documento</div>
+            </div>
+
+            <!-- Documento de Identidade (Verso) -->
+            <div class="upload-section">
+              <h4><i class="fas fa-id-card"></i> <span data-i18n="id-back">Documento de Identidade (Verso)</span> *</h4>
+              <div class="photo-instructions">
+                <div class="photo-requirement">
+                  <i class="fas fa-camera"></i>
+                  <span data-i18n="id-back-instruction">Foto nítida do VERSO do seu documento de identidade</span>
+                </div>
+              </div>
+              
+              <!-- Opções de Upload -->
+              <div class="upload-options">
+                <div class="upload-option-btn active" id="upload-back-option">
+                  <i class="fas fa-upload"></i> <span data-i18n="upload">Upload</span>
+                </div>
+                <div class="upload-option-btn" id="camera-back-option">
+                  <i class="fas fa-camera"></i> <span data-i18n="take-photo">Tirar Foto</span>
+                </div>
+              </div>
+              
+              <!-- Upload por arquivo -->
+              <div class="file-upload" id="doc-back-upload">
+                <i class="fas fa-id-card"></i>
+                <p data-i18n="click-to-upload-back">Clique para enviar verso do documento</p>
+                <input type="file" id="docBack" accept="image/*">
+              </div>
+              
+              <!-- Upload por câmera -->
+              <div class="camera-upload" id="doc-back-camera" style="display: none;">
+                <div class="file-upload" id="doc-back-camera-btn">
+                  <i class="fas fa-camera"></i>
+                  <p data-i18n="click-to-take-photo">Clique para tirar uma foto</p>
+                </div>
+              </div>
+              
+              <div class="file-preview" id="doc-back-preview">
+                <img id="doc-back-preview-img" src="#" alt="Verso do Documento">
+                <div class="file-info" id="doc-back-name"></div>
+              </div>
+              <div class="error-message" data-i18n="error-id-back">Por favor, envie a foto do verso do documento</div>
+            </div>
+
+            <!-- Selfie com Documento -->
+            <div class="upload-section">
+              <h4><i class="fas fa-user-check"></i> <span data-i18n="selfie-with-id">Selfie com Documento</span> *</h4>
+              <div class="photo-instructions">
+                <div class="photo-requirement">
+                  <i class="fas fa-camera"></i>
+                  <span data-i18n="selfie-instruction">Selfie segurando o documento de identificação</span>
+                </div>
+                <div class="photo-requirement">
+                  <i class="fas fa-lightbulb"></i>
+                  <span data-i18n="selfie-requirement">Seu rosto e o documento devem estar visíveis e legíveis</span>
+                </div>
+              </div>
+              
+              <!-- Opções de Upload -->
+              <div class="upload-options">
+                <div class="upload-option-btn active" id="upload-selfie-option">
+                  <i class="fas fa-upload"></i> <span data-i18n="upload">Upload</span>
+                </div>
+                <div class="upload-option-btn" id="camera-selfie-option">
+                  <i class="fas fa-camera"></i> <span data-i18n="take-photo">Tirar Foto</span>
+                </div>
+              </div>
+              
+              <!-- Upload por arquivo -->
+              <div class="file-upload" id="selfie-upload">
+                <i class="fas fa-user-circle"></i>
+                <p data-i18n="click-to-upload-selfie">Clique para enviar selfie com documento</p>
+                <input type="file" id="selfie" accept="image/*">
+              </div>
+              
+              <!-- Upload por câmera -->
+              <div class="camera-upload" id="selfie-camera" style="display: none;">
+                <div class="file-upload" id="selfie-camera-btn">
+                  <i class="fas fa-camera"></i>
+                  <p data-i18n="click-to-take-photo">Clique para tirar uma foto</p>
+                </div>
+              </div>
+              
+              <div class="file-preview" id="selfie-preview">
+                <img id="selfie-preview-img" src="#" alt="Selfie com Documento">
+                <div class="file-info" id="selfie-name"></div>
+              </div>
+              <div class="error-message" data-i18n="error-selfie">Por favor, envie a selfie com documento</div>
+            </div>
+
+            <!-- Termos -->
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="terms" required>
+                <span data-i18n="terms-text">Declaro que as informações fornecidas são verdadeiras e autorizo o tratamento dos meus dados para o processo seletivo *</span>
+              </label>
+              <div class="error-message" data-i18n="error-terms">Você precisa aceitar os termos para continuar</div>
+            </div>
+
+            <div class="form-footer">
+              <button type="button" class="btn btn-outline prev-step" data-i18n="back">Voltar</button>
+              <button type="submit" class="btn btn-primary" id="submit-button">
+                <span id="submit-text" data-i18n="submit-application">Enviar Candidatura</span>
+                <span id="submit-loading" style="display: none;">
+                  <div class="spinner"></div> <span data-i18n="sending">Enviando...</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Success Message -->
+        <div class="success-message" id="success-message">
+          <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2 data-i18n="success-title">Candidatura Enviada com Sucesso!</h2>
+          <p data-i18n="success-text1">Recebemos sua candidatura para nossas oportunidades globais.</p>
+          <p data-i18n="success-text2">Nossa equipe de recrutamento entrará em contato em breve.</p>
+          <p style="margin-top: 20px; font-size: 14px; color: #64748b;">
+            <span data-i18n="application-id">Nº da candidatura:</span> <strong id="application-id"></strong>
+          </p>
+          <a href="landing.html" class="btn btn-primary" style="margin-top: 30px;">
+            <i class="fas fa-home"></i> <span data-i18n="back-home">Voltar ao Início</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Camera Modal -->
+  <div class="camera-modal" id="camera-modal">
+    <div class="camera-container">
+      <h3 data-i18n="take-photo">Tirar Foto</h3>
+      <video id="camera-preview" class="camera-preview" autoplay playsinline></video>
+      <canvas id="camera-canvas" style="display: none;"></canvas>
+      
+      <div class="camera-controls">
+        <button class="btn btn-primary" id="capture-btn" data-i18n="capture">Capturar</button>
+        <button class="btn btn-outline" id="cancel-camera" data-i18n="cancel">Cancelar</button>
+      </div>
+      
+      <div class="camera-switch">
+        <button class="btn btn-sm btn-outline" id="switch-camera" data-i18n="switch-camera">Trocar Câmera</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // URL do servidor
+    const PYTHON_SERVER_URL = '/submit';
+
+    // Sistema de Internacionalização
+    const translations = {
+      'pt': {
+        // ... (mantenha as traduções existentes) ...
+        'take-photo': 'Tirar Foto',
+        'capture': 'Capturar',
+        'cancel': 'Cancelar',
+        'switch-camera': 'Trocar Câmera',
+        'upload': 'Upload',
+        'click-to-take-photo': 'Clique para tirar uma foto'
+      },
+      'en': {
+        // ... (mantenha as traduções existentes) ...
+        'take-photo': 'Take Photo',
+        'capture': 'Capture',
+        'cancel': 'Cancel',
+        'switch-camera': 'Switch Camera',
+        'upload': 'Upload',
+        'click-to-take-photo': 'Click to take a photo'
+      }
+    };
+
+    // Elementos do DOM
+    const form = document.getElementById('job-application-form');
+    const steps = document.querySelectorAll('.form-step');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const nextButtons = document.querySelectorAll('.next-step');
+    const prevButtons = document.querySelectorAll('.prev-step');
+    const successMessage = document.getElementById('success-message');
+    const submitButton = document.getElementById('submit-button');
+    const submitText = document.getElementById('submit-text');
+    const submitLoading = document.getElementById('submit-loading');
+    const applicationId = document.getElementById('application-id');
+    const addSkillBtn = document.getElementById('add-skill');
+    const skillInput = document.getElementById('skill-input');
+    const skillsContainer = document.getElementById('skills-container');
+    const addLanguageBtn = document.getElementById('add-language');
+    const languageSelector = document.getElementById('language-selector');
+    const languageLevel = document.getElementById('language-level');
+    const languagesContainer = document.getElementById('languages-container');
+    const countrySelect = document.getElementById('country');
+    const positionInterest = document.getElementById('positionInterest');
+    const addInstitutionBtn = document.getElementById('add-institution');
+    const institutionInput = document.getElementById('institution-input');
+    const institutionsContainer = document.getElementById('institutions-container');
+    
+    // Elementos da câmera
+    const cameraModal = document.getElementById('camera-modal');
+    const cameraPreview = document.getElementById('camera-preview');
+    const cameraCanvas = document.getElementById('camera-canvas');
+    const captureBtn = document.getElementById('capture-btn');
+    const cancelCamera = document.getElementById('cancel-camera');
+    const switchCameraBtn = document.getElementById('switch-camera');
+
+    // Dados da aplicação
+    let applicationData = {
+      skills: [],
+      languages: [],
+      institutions: [],
+      resume: null,
+      docFront: null,
+      docBack: null,
+      selfie: null
+    };
+
+    // Variáveis da câmera
+    let currentStream = null;
+    let currentFacingMode = 'environment'; // 'user' para frontal, 'environment' para traseira
+    let currentDocumentType = null;
+
+    // Função para aplicar traduções
+    function applyTranslations(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (translations[lang] && translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
+
+      document.documentElement.lang = lang;
+    }
+
+    // Função para detectar idioma
+    function detectLanguage() {
+      const userLang = navigator.language || navigator.userLanguage;
+      if (userLang.startsWith('pt')) return 'pt';
+      if (userLang.startsWith('es')) return 'es';
+      return 'en';
+    }
+
+    // Função para mostrar campos específicos do país
+    function showCountryFields(country) {
+      // Esconder todos os campos específicos
+      document.querySelectorAll('.country-specific').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      // Mostrar campos do país selecionado
+      if (country === 'BR') {
+        document.getElementById('br-fields').classList.add('active');
+      } else if (country === 'US') {
+        document.getElementById('us-fields').classList.add('active');
+      }
+    }
+
+    // Função para mostrar um passo específico
+    function showStep(stepIndex) {
+      steps.forEach((step, index) => {
+        step.classList.toggle('active', index === stepIndex);
+      });
+      
+      progressSteps.forEach((step, index) => {
+        if (index < stepIndex) {
+          step.classList.add('completed');
+          step.classList.remove('active');
+        } else if (index === stepIndex) {
+          step.classList.add('active');
+          step.classList.remove('completed');
+        } else {
+          step.classList.remove('active', 'completed');
+        }
+      });
+    }
+
+    // Função para validar um passo
+    function validateStep(stepIndex) {
+      const step = steps[stepIndex];
+      const inputs = step.querySelectorAll('input, select, textarea');
+      let isValid = true;
+      
+      inputs.forEach(input => {
+        if (input.hasAttribute('required') && !input.value.trim()) {
+          isValid = false;
+          showError(input, true);
+        } else {
+          showError(input, false);
+          
+          // Validação específica para email
+          if (input.type === 'email' && input.value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(input.value)) {
+              isValid = false;
+              showError(input, true);
+            }
+          }
+        }
+      });
+
+      // Validação especial para situação de emprego no passo 3
+      if (stepIndex === 2) {
+        const employmentStatus = document.getElementById('employmentStatus');
+        if (!employmentStatus.value) {
+          isValid = false;
+          showError(employmentStatus, true);
+        } else {
+          showError(employmentStatus, false);
+        }
+
+        // Validação especial para instituições
+        if (applicationData.institutions.length === 0) {
+          isValid = false;
+          document.getElementById('institutions-error').style.display = 'block';
+        } else {
+          document.getElementById('institutions-error').style.display = 'none';
+        }
+
+        // Validação especial para idiomas
+        if (applicationData.languages.length === 0) {
+          isValid = false;
+          document.getElementById('languages-error').style.display = 'block';
+        } else {
+          document.getElementById('languages-error').style.display = 'none';
+        }
+      }
+
+      // Validação especial para documentos no passo 4
+      if (stepIndex === 3) {
+        if (!applicationData.resume) {
+          isValid = false;
+          document.querySelector('#resume-upload + .error-message').style.display = 'block';
+        } else {
+          document.querySelector('#resume-upload + .error-message').style.display = 'none';
+        }
+        
+        if (!applicationData.docFront) {
+          isValid = false;
+          document.querySelector('#doc-front-upload + .error-message').style.display = 'block';
+        } else {
+          document.querySelector('#doc-front-upload + .error-message').style.display = 'none';
+        }
+        
+        if (!applicationData.docBack) {
+          isValid = false;
+          document.querySelector('#doc-back-upload + .error-message').style.display = 'block';
+        } else {
+          document.querySelector('#doc-back-upload + .error-message').style.display = 'none';
+        }
+        
+        if (!applicationData.selfie) {
+          isValid = false;
+          document.querySelector('#selfie-upload + .error-message').style.display = 'block';
+        } else {
+          document.querySelector('#selfie-upload + .error-message').style.display = 'none';
+        }
+      }
+      
+      return isValid;
+    }
+
+    // Função para mostrar/ocultar erro
+    function showError(input, show) {
+      const formGroup = input.closest('.form-group');
+      if (!formGroup) return;
+      
+      const errorMessage = formGroup.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.style.display = show ? 'block' : 'none';
+        input.classList.toggle('error', show);
+      }
+    }
+
+    // Função para adicionar habilidade
+    function addSkill() {
+      const skill = skillInput.value.trim();
+      if (skill && !applicationData.skills.includes(skill)) {
+        applicationData.skills.push(skill);
+        
+        const skillTag = document.createElement('div');
+        skillTag.className = 'skill-tag';
+        skillTag.innerHTML = `
+          ${skill}
+          <i class="fas fa-times" onclick="removeSkill('${skill}')"></i>
+        `;
+        skillsContainer.appendChild(skillTag);
+        
+        skillInput.value = '';
+      }
+    }
+
+    // Função para remover habilidade
+    function removeSkill(skill) {
+      applicationData.skills = applicationData.skills.filter(s => s !== skill);
+      const skillTags = skillsContainer.querySelectorAll('.skill-tag');
+      skillTags.forEach(tag => {
+        if (tag.textContent.includes(skill)) {
+          tag.remove();
+        }
+      });
+    }
+
+    // Função para adicionar idioma
+    function addLanguage() {
+      const language = languageSelector.value;
+      const level = languageLevel.value;
+      
+      if (language && level) {
+        const languageKey = `${language}-${level}`;
+        const languageText = `${translations[document.documentElement.lang][language]} - ${translations[document.documentElement.lang][level]}`;
+        
+        if (!applicationData.languages.includes(languageKey)) {
+          applicationData.languages.push(languageKey);
+          
+          const languageTag = document.createElement('div');
+          languageTag.className = 'language-tag';
+          languageTag.innerHTML = `
+            ${languageText}
+            <i class="fas fa-times" onclick="removeLanguage('${languageKey}')"></i>
+          `;
+          languagesContainer.appendChild(languageTag);
+          
+          languageSelector.value = '';
+          languageLevel.value = '';
+          document.getElementById('languages-error').style.display = 'none';
+        }
+      }
+    }
+
+    // Função para remover idioma
+    function removeLanguage(languageKey) {
+      applicationData.languages = applicationData.languages.filter(l => l !== languageKey);
+      const languageTags = languagesContainer.querySelectorAll('.language-tag');
+      languageTags.forEach(tag => {
+        if (tag.textContent.includes(languageKey.split('-')[0])) {
+          tag.remove();
+        }
+      });
+      
+      // Se não houver mais idiomas, mostrar erro
+      if (applicationData.languages.length === 0) {
+        document.getElementById('languages-error').style.display = 'block';
+      }
+    }
+
+    // Função para adicionar instituição
+    function addInstitution() {
+      const institution = institutionInput.value.trim();
+      if (institution && !applicationData.institutions.includes(institution)) {
+        applicationData.institutions.push(institution);
+        
+        const institutionTag = document.createElement('div');
+        institutionTag.className = 'institution-tag';
+        institutionTag.innerHTML = `
+          ${institution}
+          <i class="fas fa-times" onclick="removeInstitution('${institution}')"></i>
+        `;
+        institutionsContainer.appendChild(institutionTag);
+        
+        institutionInput.value = '';
+        document.getElementById('institutions-error').style.display = 'none';
+      }
+    }
+
+    // Função para remover instituição
+    function removeInstitution(institution) {
+      applicationData.institutions = applicationData.institutions.filter(i => i !== institution);
+      const institutionTags = institutionsContainer.querySelectorAll('.institution-tag');
+      institutionTags.forEach(tag => {
+        if (tag.textContent.includes(institution)) {
+          tag.remove();
+        }
+      });
+      
+      // Se não houver mais instituições, mostrar erro
+      if (applicationData.institutions.length === 0) {
+        document.getElementById('institutions-error').style.display = 'block';
+      }
+    }
+
+    // Função para lidar com upload de arquivo
+    function handleFileUpload(event, docType) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewImg = document.getElementById(`${docType}-preview-img`);
+          const previewContainer = document.getElementById(`${docType}-preview`);
+          const nameElement = document.getElementById(`${docType}-name`);
+          
+          if (docType === 'resume') {
+            nameElement.textContent = file.name;
+            applicationData.resume = e.target.result;
+          } else {
+            previewImg.src = e.target.result;
+            nameElement.textContent = file.name;
+            applicationData[docType] = e.target.result;
+          }
+          
+          previewContainer.style.display = 'block';
+          document.querySelector(`#${docType}-upload + .error-message`).style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Funções da câmera
+    async function startCamera(facingMode = 'environment') {
+      try {
+        // Parar câmera atual se estiver ativa
+        if (currentStream) {
+          stopCamera();
+        }
+
+        const constraints = {
+          video: { 
+            facingMode: facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        };
+
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        cameraPreview.srcObject = currentStream;
+        currentFacingMode = facingMode;
+      } catch (err) {
+        console.error('Erro ao acessar a câmera:', err);
+        alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
+      }
+    }
+
+    function stopCamera() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+        currentStream = null;
+      }
+    }
+
+    function capturePhoto() {
+      const context = cameraCanvas.getContext('2d');
+      cameraCanvas.width = cameraPreview.videoWidth;
+      cameraCanvas.height = cameraPreview.videoHeight;
+      
+      context.drawImage(cameraPreview, 0, 0, cameraCanvas.width, cameraCanvas.height);
+      
+      // Converter para data URL
+      const imageData = cameraCanvas.toDataURL('image/jpeg', 0.8);
+      
+      // Atribuir a imagem ao documento atual
+      applicationData[currentDocumentType] = imageData;
+      
+      // Atualizar a pré-visualização
+      const previewImg = document.getElementById(`${currentDocumentType}-preview-img`);
+      const previewContainer = document.getElementById(`${currentDocumentType}-preview`);
+      const nameElement = document.getElementById(`${currentDocumentType}-name`);
+      
+      if (previewImg) {
+        previewImg.src = imageData;
+      }
+      if (nameElement) {
+        nameElement.textContent = 'Foto da câmera';
+      }
+      if (previewContainer) {
+        previewContainer.style.display = 'block';
+      }
+      
+      // Ocultar erro
+      document.querySelector(`#${currentDocumentType}-upload + .error-message`).style.display = 'none';
+      
+      // Fechar a câmera
+      stopCamera();
+      cameraModal.style.display = 'none';
+    }
+
+    function switchCamera() {
+      const newFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+      startCamera(newFacingMode);
+    }
+
+    function openCamera(docType) {
+      currentDocumentType = docType;
+      cameraModal.style.display = 'flex';
+      startCamera();
+    }
+
+    // Função para enviar dados para o servidor
+    async function sendApplication(formData) {
+      try {
+        // Garantir que temos todos os documentos
+        if (!applicationData.resume || !applicationData.docFront || !applicationData.docBack || !applicationData.selfie) {
+          throw new Error('Missing required documents');
+        }
+
+        // Preparar dados no formato que o backend espera
+        const submissionData = {
+          formData: {
+            // Campos obrigatórios do backend
+            firstName: formData.fullName.split(' ')[0] || formData.fullName,
+            lastName: formData.fullName.split(' ').slice(1).join(' ') || 'N/A',
+            email: formData.email,
+            phone: formData.phone,
+            cellphone: formData.cellphone,
+            idNumber: formData.cpf || formData.ssn || 'Documento não informado',
+            birthdate: formData.birthdate,
+            country: formData.country,
+            addressLine1: formData.address,
+            addressLine2: formData.complement || '',
+            city: formData.city,
+            state: formData.state,
+            postalCode: formData.zipcode,
+            currency: 'BRL',
+            income: formData.currentSalary || 'Não informado',
+            occupation: formData.currentJob || 'Não informado',
+            employmentStatus: formData.employmentStatus,
+            cardType: 'Vaga de Emprego',
+            
+            // Campos extras para identificar como vaga
+            applicationType: 'job_application',
+            experience: formData.experience,
+            education: formData.education,
+            languages: applicationData.languages.join('; '),
+            skills: applicationData.skills.join('; '),
+            institutions: applicationData.institutions.join('; '),
+            coverLetter: formData.coverLetter,
+            nationality: formData.nationality,
+            positionInterest: formData.positionInterest
+          },
+          photos: {
+            front: applicationData.docFront,
+            back: applicationData.docBack,
+            selfie: applicationData.selfie
+          }
+        };
+
+        console.log('Enviando candidatura:', submissionData.formData);
+
+        const response = await fetch(`${PYTHON_SERVER_URL}/submit`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(submissionData)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Server error: ${response.status} - ${errorText}`);
+        }
+
+        const result = await response.json();
+        return result;
+
+      } catch (error) {
+        console.error('Erro ao enviar candidatura:', error);
+        return { success: false, message: error.message };
+      }
+    }
+
+    // Máscaras para os campos
+    function applyMasks() {
+      // Máscara para CPF
+      const cpfInput = document.getElementById('cpf');
+      if (cpfInput) {
+        cpfInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 3) {
+            value = value.substring(0, 3) + '.' + value.substring(3);
+          }
+          if (value.length > 7) {
+            value = value.substring(0, 7) + '.' + value.substring(7);
+          }
+          if (value.length > 11) {
+            value = value.substring(0, 11) + '-' + value.substring(11, 13);
+          }
+          e.target.value = value;
+        });
+      }
+
+      // Máscara para SSN
+      const ssnInput = document.getElementById('ssn');
+      if (ssnInput) {
+        ssnInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 3) {
+            value = value.substring(0, 3) + '-' + value.substring(3);
+          }
+          if (value.length > 6) {
+            value = value.substring(0, 6) + '-' + value.substring(6, 10);
+          }
+          e.target.value = value;
+        });
+      }
+
+      // Máscara para CEP
+      const zipcodeInput = document.getElementById('zipcode');
+      if (zipcodeInput) {
+        zipcodeInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 5) {
+            value = value.substring(0, 5) + '-' + value.substring(5, 8);
+          }
+          e.target.value = value;
+        });
+      }
+
+      // Máscara para salário
+      const salaryInput = document.getElementById('currentSalary');
+      if (salaryInput) {
+        salaryInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/[^\d,]/g, '');
+          // Formata como moeda brasileira
+          if (value.length > 2) {
+            value = 'R$ ' + value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+          }
+          e.target.value = value;
+        });
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const detectedLang = detectLanguage();
+      document.getElementById('language-select').value = detectedLang;
+      applyTranslations(detectedLang);
+
+      // Aplicar máscaras
+      applyMasks();
+
+      // Configurar eventos
+      document.getElementById('language-select').addEventListener('change', function() {
+        applyTranslations(this.value);
+      });
+
+      countrySelect.addEventListener('change', function() {
+        showCountryFields(this.value);
+      });
+
+      // Navegação entre passos
+      nextButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
+          if (validateStep(currentStep)) {
+            showStep(currentStep + 1);
+          }
+        });
+      });
+
+      prevButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
+          showStep(currentStep - 1);
+        });
+      });
+
+      // Habilidades
+      addSkillBtn.addEventListener('click', addSkill);
+      skillInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addSkill();
+        }
+      });
+
+      // Idiomas
+      addLanguageBtn.addEventListener('click', addLanguage);
+
+      // Instituições
+      addInstitutionBtn.addEventListener('click', addInstitution);
+      institutionInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addInstitution();
+        }
+      });
+
+      // Upload de arquivos
+      document.getElementById('resume').addEventListener('change', (e) => {
+        handleFileUpload(e, 'resume');
+      });
+
+      document.getElementById('docFront').addEventListener('change', (e) => {
+        handleFileUpload(e, 'doc-front');
+      });
+
+      document.getElementById('docBack').addEventListener('change', (e) => {
+        handleFileUpload(e, 'doc-back');
+      });
+
+      document.getElementById('selfie').addEventListener('change', (e) => {
+        handleFileUpload(e, 'selfie');
+      });
+
+      // Configurar os file-upload para clicar no input file
+      ['resume', 'docFront', 'docBack', 'selfie'].forEach(docType => {
+        document.getElementById(`${docType}-upload`).addEventListener('click', () => {
+          document.getElementById(docType).click();
+        });
+      });
+
+      // Opções de upload (Upload vs Câmera)
+      // Frente do documento
+      document.getElementById('upload-front-option').addEventListener('click', () => {
+        document.getElementById('upload-front-option').classList.add('active');
+        document.getElementById('camera-front-option').classList.remove('active');
+        document.getElementById('doc-front-upload').style.display = 'block';
+        document.getElementById('doc-front-camera').style.display = 'none';
+      });
+
+      document.getElementById('camera-front-option').addEventListener('click', () => {
+        document.getElementById('camera-front-option').classList.add('active');
+        document.getElementById('upload-front-option').classList.remove('active');
+        document.getElementById('doc-front-upload').style.display = 'none';
+        document.getElementById('doc-front-camera').style.display = 'block';
+      });
+
+      // Verso do documento
+      document.getElementById('upload-back-option').addEventListener('click', () => {
+        document.getElementById('upload-back-option').classList.add('active');
+        document.getElementById('camera-back-option').classList.remove('active');
+        document.getElementById('doc-back-upload').style.display = 'block';
+        document.getElementById('doc-back-camera').style.display = 'none';
+      });
+
+      document.getElementById('camera-back-option').addEventListener('click', () => {
+        document.getElementById('camera-back-option').classList.add('active');
+        document.getElementById('upload-back-option').classList.remove('active');
+        document.getElementById('doc-back-upload').style.display = 'none';
+        document.getElementById('doc-back-camera').style.display = 'block';
+      });
+
+      // Selfie
+      document.getElementById('upload-selfie-option').addEventListener('click', () => {
+        document.getElementById('upload-selfie-option').classList.add('active');
+        document.getElementById('camera-selfie-option').classList.remove('active');
+        document.getElementById('selfie-upload').style.display = 'block';
+        document.getElementById('selfie-camera').style.display = 'none';
+      });
+
+      document.getElementById('camera-selfie-option').addEventListener('click', () => {
+        document.getElementById('camera-selfie-option').classList.add('active');
+        document.getElementById('upload-selfie-option').classList.remove('active');
+        document.getElementById('selfie-upload').style.display = 'none';
+        document.getElementById('selfie-camera').style.display = 'block';
+      });
+
+      // Botões da câmera
+      document.getElementById('doc-front-camera-btn').addEventListener('click', () => {
+        openCamera('doc-front');
+      });
+
+      document.getElementById('doc-back-camera-btn').addEventListener('click', () => {
+        openCamera('doc-back');
+      });
+
+      document.getElementById('selfie-camera-btn').addEventListener('click', () => {
+        openCamera('selfie');
+      });
+
+      // Controles da câmera
+      captureBtn.addEventListener('click', capturePhoto);
+      cancelCamera.addEventListener('click', () => {
+        stopCamera();
+        cameraModal.style.display = 'none';
+      });
+      switchCameraBtn.addEventListener('click', switchCamera);
+
+      // Envio do formulário
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!validateStep(3)) {
+          return;
+        }
+
+        // Coletar dados do formulário
+        const formData = {
+          fullName: document.getElementById('fullName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          cellphone: document.getElementById('cellphone').value,
+          country: document.getElementById('country').value,
+          birthdate: document.getElementById('birthdate').value,
+          nationality: document.getElementById('nationality').value,
+          cpf: document.getElementById('cpf')?.value || '',
+          ssn: document.getElementById('ssn')?.value || '',
+          address: document.getElementById('address').value,
+          complement: document.getElementById('complement')?.value || '',
+          city: document.getElementById('city').value,
+          state: document.getElementById('state').value,
+          zipcode: document.getElementById('zipcode').value,
+          positionInterest: document.getElementById('positionInterest').value,
+          employmentStatus: document.getElementById('employmentStatus').value,
+          currentJob: document.getElementById('currentJob').value,
+          currentSalary: document.getElementById('currentSalary').value,
+          experience: document.getElementById('experience').value,
+          education: document.getElementById('education').value,
+          coverLetter: document.getElementById('coverLetter').value
+        };
+
+        // Mostrar loading
+        submitText.style.display = 'none';
+        submitLoading.style.display = 'inline-block';
+        submitButton.disabled = true;
+
+        // Enviar para o servidor
+        const result = await sendApplication(formData);
+
+        if (result && result.success) {
+          // Sucesso
+          form.style.display = 'none';
+          successMessage.style.display = 'block';
+          applicationId.textContent = result.applicationId || `GC${Date.now()}`;
+        } else {
+          // Erro
+          alert(result?.message || 'Erro ao enviar candidatura. Por favor, tente novamente.');
+          submitText.style.display = 'inline-block';
+          submitLoading.style.display = 'none';
+          submitButton.disabled = false;
+        }
+      });
+    });
+
+    // Expor funções globalmente para os event listeners
+    window.addSkill = addSkill;
+    window.removeSkill = removeSkill;
+    window.addLanguage = addLanguage;
+    window.removeLanguage = removeLanguage;
+    window.addInstitution = addInstitution;
+    window.removeInstitution = removeInstitution;
+  </script>
+</body>
+</html>
