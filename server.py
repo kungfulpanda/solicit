@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import requests
 import json
 import base64
@@ -47,6 +47,17 @@ TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
     logger.error("Credenciais do Telegram não encontradas nas variáveis de ambiente")
     raise ValueError("Credenciais do Telegram não encontradas nas variáveis de ambiente")
+
+# Rotas para servir arquivos estáticos
+@app.route('/')
+def serve_index():
+    """Serve o arquivo HTML principal"""
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve arquivos estáticos (CSS, JS, imagens, etc.)"""
+    return send_from_directory('.', path)
 
 def validate_email(email):
     """Valida formato de email"""
