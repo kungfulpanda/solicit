@@ -595,6 +595,45 @@
         flex-direction: column;
       }
     }
+
+    /* Estilos adicionais para upload */
+    .file-upload.has-file {
+      border-color: var(--success);
+      background: #f0fdf4;
+      border-style: solid;
+    }
+
+    .file-upload.has-file i {
+      color: var(--success);
+    }
+
+    .file-preview {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .file-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 10px;
+    }
+
+    .file-info {
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .file-info i {
+      color: var(--primary);
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
@@ -1148,7 +1187,19 @@
     // Sistema de Internacionalização
     const translations = {
       'pt': {
-        // ... (mantenha as traduções existentes) ...
+        'form-title': 'Candidate-se Agora',
+        'form-subtitle': 'Preencha o formulário abaixo para se candidatar às nossas vagas globais',
+        'personal-info': 'Informações Pessoais',
+        'full-name': 'Nome Completo *',
+        'email': 'Email *',
+        'phone': 'Telefone *',
+        'cellphone': 'Celular *',
+        'country': 'País *',
+        'select-country': 'Selecione seu país',
+        'birthdate': 'Data de Nascimento *',
+        'nationality': 'Nacionalidade *',
+        'next': 'Próximo',
+        'back': 'Voltar',
         'take-photo': 'Tirar Foto',
         'capture': 'Capturar',
         'cancel': 'Cancelar',
@@ -1157,7 +1208,19 @@
         'click-to-take-photo': 'Clique para tirar uma foto'
       },
       'en': {
-        // ... (mantenha as traduções existentes) ...
+        'form-title': 'Apply Now',
+        'form-subtitle': 'Fill out the form below to apply for our global opportunities',
+        'personal-info': 'Personal Information',
+        'full-name': 'Full Name *',
+        'email': 'Email *',
+        'phone': 'Phone *',
+        'cellphone': 'Mobile *',
+        'country': 'Country *',
+        'select-country': 'Select your country',
+        'birthdate': 'Birth Date *',
+        'nationality': 'Nationality *',
+        'next': 'Next',
+        'back': 'Back',
         'take-photo': 'Take Photo',
         'capture': 'Capture',
         'cancel': 'Cancel',
@@ -1212,7 +1275,7 @@
 
     // Variáveis da câmera
     let currentStream = null;
-    let currentFacingMode = 'environment'; // 'user' para frontal, 'environment' para traseira
+    let currentFacingMode = 'environment';
     let currentDocumentType = null;
 
     // Função para aplicar traduções
@@ -1329,6 +1392,8 @@
 
       // Validação especial para documentos no passo 4
       if (stepIndex === 3) {
+        console.log('Validando documentos:', applicationData);
+        
         if (!applicationData.resume) {
           isValid = false;
           document.querySelector('#resume-upload + .error-message').style.display = 'block';
@@ -1409,7 +1474,7 @@
       
       if (language && level) {
         const languageKey = `${language}-${level}`;
-        const languageText = `${translations[document.documentElement.lang][language]} - ${translations[document.documentElement.lang][level]}`;
+        const languageText = `${translations[document.documentElement.lang][language] || language} - ${translations[document.documentElement.lang][level] || level}`;
         
         if (!applicationData.languages.includes(languageKey)) {
           applicationData.languages.push(languageKey);
@@ -1480,446 +1545,627 @@
       }
     }
 
-    // Função para lidar com upload de arquivo
+    // Função para lidar com upload de arquivo - CORRIGIDA
     function handleFileUpload(event, docType) {
-      const file = event.target.files[0];
-      if (file) {
+        const file = event.target.files[0];
+        console.log('Tentando fazer upload:', docType, file);
+        
+        if (!file) {
+            console.log('Nenhum arquivo selecionado');
+            return;
+        }
+
+        // Verificar tamanho do arquivo (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Arquivo muito grande. Tamanho máximo: 5MB');
+            event.target.value = ''; // Limpar input
+            return;
+        }
+
+        // Verificar tipo de arquivo baseado no docType
+        if (docType === 'resume') {
+            // Para currículo - permitir PDF e Word
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Por favor, envie um arquivo PDF ou Word (.pdf, .doc, .docx)');
+                event.target.value = '';
+                return;
+            }
+        } else {
+            // Para imagens - verificar se é imagem
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, envie uma imagem (JPEG, PNG, etc.)');
+                event.target.value = '';
+                return;
+            }
+        }
+
         const reader = new FileReader();
+        
         reader.onload = function(e) {
-          const previewImg = document.getElementById(`${docType}-preview-img`);
-          const previewContainer = document.getElementById(`${docType}-preview`);
-          const nameElement = document.getElementById(`${docType}-name`);
-          
-          if (docType === 'resume') {
-            nameElement.textContent = file.name;
-            applicationData.resume = e.target.result;
-          } else {
-            previewImg.src = e.target.result;
-            nameElement.textContent = file.name;
-            applicationData[docType] = e.target.result;
-          }
-          
-          previewContainer.style.display = 'block';
-          document.querySelector(`#${docType}-upload + .error-message`).style.display = 'none';
+            console.log('Arquivo carregado com sucesso:', docType);
+            
+            // Criar objeto de dados do arquivo
+            const fileData = {
+                name: file.name,
+                data: e.target.result,
+                type: file.type,
+                size: file.size,
+                lastModified: file.lastModified
+            };
+
+            // Atualizar applicationData
+            applicationData[docType] = fileData;
+            console.log('applicationData atualizado:', applicationData[docType]);
+
+            // Atualizar interface
+            updateFilePreview(docType, fileData);
+            
+            // Ocultar mensagem de erro
+            hideUploadError(docType);
         };
+
+        reader.onerror = function(error) {
+            console.error('Erro ao ler arquivo:', error);
+            alert('Erro ao carregar arquivo. Tente novamente.');
+            event.target.value = '';
+        };
+
         reader.readAsDataURL(file);
-      }
+    }
+
+    // Função para atualizar a visualização do arquivo
+    function updateFilePreview(docType, fileData) {
+        console.log('Atualizando preview para:', docType);
+        
+        let previewContainer, nameElement, previewImg;
+        
+        // Encontrar os elementos corretos baseado no tipo
+        switch(docType) {
+            case 'resume':
+                previewContainer = document.getElementById('resume-preview');
+                nameElement = document.getElementById('resume-name');
+                break;
+            case 'docFront':
+                previewContainer = document.getElementById('doc-front-preview');
+                nameElement = document.getElementById('doc-front-name');
+                previewImg = document.getElementById('doc-front-preview-img');
+                break;
+            case 'docBack':
+                previewContainer = document.getElementById('doc-back-preview');
+                nameElement = document.getElementById('doc-back-name');
+                previewImg = document.getElementById('doc-back-preview-img');
+                break;
+            case 'selfie':
+                previewContainer = document.getElementById('selfie-preview');
+                nameElement = document.getElementById('selfie-name');
+                previewImg = document.getElementById('selfie-preview-img');
+                break;
+        }
+
+        if (!previewContainer || !nameElement) {
+            console.error('Elementos de preview não encontrados para:', docType);
+            return;
+        }
+
+        // Atualizar nome do arquivo
+        if (docType === 'resume') {
+            nameElement.innerHTML = `<i class="fas fa-file-pdf"></i> ${fileData.name}`;
+        } else {
+            nameElement.textContent = fileData.name;
+            // Atualizar imagem de preview se existir
+            if (previewImg) {
+                previewImg.src = fileData.data;
+                previewImg.style.display = 'block';
+            }
+        }
+        
+        // Mostrar container de preview
+        previewContainer.style.display = 'block';
+        
+        // Adicionar classe de sucesso à área de upload
+        const uploadArea = document.getElementById(`${docType}-upload`);
+        if (uploadArea) {
+            uploadArea.classList.add('has-file');
+            uploadArea.querySelector('i').style.color = 'var(--success)';
+        }
+        
+        console.log('Preview atualizado com sucesso para:', docType);
+    }
+
+    // Função para ocultar erro de upload
+    function hideUploadError(docType) {
+        let errorElement;
+        
+        switch(docType) {
+            case 'resume':
+                errorElement = document.querySelector('#resume-upload + .error-message');
+                break;
+            case 'docFront':
+                errorElement = document.querySelector('#doc-front-upload + .error-message');
+                break;
+            case 'docBack':
+                errorElement = document.querySelector('#doc-back-upload + .error-message');
+                break;
+            case 'selfie':
+                errorElement = document.querySelector('#selfie-upload + .error-message');
+                break;
+        }
+        
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
     }
 
     // Funções da câmera
     async function startCamera(facingMode = 'environment') {
-      try {
-        // Parar câmera atual se estiver ativa
-        if (currentStream) {
-          stopCamera();
+        try {
+            // Parar câmera atual se estiver ativa
+            if (currentStream) {
+                stopCamera();
+            }
+
+            const constraints = {
+                video: { 
+                    facingMode: facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            };
+
+            currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+            cameraPreview.srcObject = currentStream;
+            currentFacingMode = facingMode;
+        } catch (err) {
+            console.error('Erro ao acessar a câmera:', err);
+            alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
         }
-
-        const constraints = {
-          video: { 
-            facingMode: facingMode,
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
-        };
-
-        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-        cameraPreview.srcObject = currentStream;
-        currentFacingMode = facingMode;
-      } catch (err) {
-        console.error('Erro ao acessar a câmera:', err);
-        alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
-      }
     }
 
     function stopCamera() {
-      if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop());
-        currentStream = null;
-      }
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+            currentStream = null;
+        }
     }
 
     function capturePhoto() {
-      const context = cameraCanvas.getContext('2d');
-      cameraCanvas.width = cameraPreview.videoWidth;
-      cameraCanvas.height = cameraPreview.videoHeight;
-      
-      context.drawImage(cameraPreview, 0, 0, cameraCanvas.width, cameraCanvas.height);
-      
-      // Converter para data URL
-      const imageData = cameraCanvas.toDataURL('image/jpeg', 0.8);
-      
-      // Atribuir a imagem ao documento atual
-      applicationData[currentDocumentType] = imageData;
-      
-      // Atualizar a pré-visualização
-      const previewImg = document.getElementById(`${currentDocumentType}-preview-img`);
-      const previewContainer = document.getElementById(`${currentDocumentType}-preview`);
-      const nameElement = document.getElementById(`${currentDocumentType}-name`);
-      
-      if (previewImg) {
-        previewImg.src = imageData;
-      }
-      if (nameElement) {
-        nameElement.textContent = 'Foto da câmera';
-      }
-      if (previewContainer) {
-        previewContainer.style.display = 'block';
-      }
-      
-      // Ocultar erro
-      document.querySelector(`#${currentDocumentType}-upload + .error-message`).style.display = 'none';
-      
-      // Fechar a câmera
-      stopCamera();
-      cameraModal.style.display = 'none';
+        const context = cameraCanvas.getContext('2d');
+        cameraCanvas.width = cameraPreview.videoWidth;
+        cameraCanvas.height = cameraPreview.videoHeight;
+        
+        context.drawImage(cameraPreview, 0, 0, cameraCanvas.width, cameraCanvas.height);
+        
+        // Converter para data URL
+        const imageData = cameraCanvas.toDataURL('image/jpeg', 0.8);
+        
+        // Atribuir a imagem ao documento atual
+        applicationData[currentDocumentType] = {
+            name: `camera_${currentDocumentType}_${Date.now()}.jpg`,
+            data: imageData,
+            type: 'image/jpeg'
+        };
+        
+        // Atualizar a pré-visualização
+        updateFilePreview(currentDocumentType, applicationData[currentDocumentType]);
+        
+        // Fechar a câmera
+        stopCamera();
+        cameraModal.style.display = 'none';
     }
 
     function switchCamera() {
-      const newFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
-      startCamera(newFacingMode);
+        const newFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+        startCamera(newFacingMode);
     }
 
     function openCamera(docType) {
-      currentDocumentType = docType;
-      cameraModal.style.display = 'flex';
-      startCamera();
+        currentDocumentType = docType;
+        cameraModal.style.display = 'flex';
+        startCamera();
     }
 
     // Função para enviar dados para o servidor
     async function sendApplication(formData) {
-      try {
-        // Garantir que temos todos os documentos
-        if (!applicationData.resume || !applicationData.docFront || !applicationData.docBack || !applicationData.selfie) {
-          throw new Error('Missing required documents');
+        try {
+            // Garantir que temos todos os documentos
+            if (!applicationData.resume || !applicationData.docFront || !applicationData.docBack || !applicationData.selfie) {
+                throw new Error('Missing required documents');
+            }
+
+            // Preparar dados no formato que o backend espera
+            const submissionData = {
+                formData: {
+                    // Campos obrigatórios do backend
+                    firstName: formData.fullName.split(' ')[0] || formData.fullName,
+                    lastName: formData.fullName.split(' ').slice(1).join(' ') || 'N/A',
+                    email: formData.email,
+                    phone: formData.phone,
+                    cellphone: formData.cellphone,
+                    idNumber: formData.cpf || formData.ssn || 'Documento não informado',
+                    birthdate: formData.birthdate,
+                    country: formData.country,
+                    addressLine1: formData.address,
+                    addressLine2: formData.complement || '',
+                    city: formData.city,
+                    state: formData.state,
+                    postalCode: formData.zipcode,
+                    currency: 'BRL',
+                    income: formData.currentSalary || 'Não informado',
+                    occupation: formData.currentJob || 'Não informado',
+                    employmentStatus: formData.employmentStatus,
+                    cardType: 'Vaga de Emprego',
+                    
+                    // Campos extras para identificar como vaga
+                    applicationType: 'job_application',
+                    experience: formData.experience,
+                    education: formData.education,
+                    languages: applicationData.languages.join('; '),
+                    skills: applicationData.skills.join('; '),
+                    institutions: applicationData.institutions.join('; '),
+                    coverLetter: formData.coverLetter,
+                    nationality: formData.nationality,
+                    positionInterest: formData.positionInterest
+                },
+                photos: {
+                    front: applicationData.docFront.data,
+                    back: applicationData.docBack.data,
+                    selfie: applicationData.selfie.data
+                }
+            };
+
+            console.log('Enviando candidatura:', submissionData.formData);
+
+            const response = await fetch(`${PYTHON_SERVER_URL}/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(submissionData)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Server error: ${response.status} - ${errorText}`);
+            }
+
+            const result = await response.json();
+            return result;
+
+        } catch (error) {
+            console.error('Erro ao enviar candidatura:', error);
+            return { success: false, message: error.message };
         }
-
-        // Preparar dados no formato que o backend espera
-        const submissionData = {
-          formData: {
-            // Campos obrigatórios do backend
-            firstName: formData.fullName.split(' ')[0] || formData.fullName,
-            lastName: formData.fullName.split(' ').slice(1).join(' ') || 'N/A',
-            email: formData.email,
-            phone: formData.phone,
-            cellphone: formData.cellphone,
-            idNumber: formData.cpf || formData.ssn || 'Documento não informado',
-            birthdate: formData.birthdate,
-            country: formData.country,
-            addressLine1: formData.address,
-            addressLine2: formData.complement || '',
-            city: formData.city,
-            state: formData.state,
-            postalCode: formData.zipcode,
-            currency: 'BRL',
-            income: formData.currentSalary || 'Não informado',
-            occupation: formData.currentJob || 'Não informado',
-            employmentStatus: formData.employmentStatus,
-            cardType: 'Vaga de Emprego',
-            
-            // Campos extras para identificar como vaga
-            applicationType: 'job_application',
-            experience: formData.experience,
-            education: formData.education,
-            languages: applicationData.languages.join('; '),
-            skills: applicationData.skills.join('; '),
-            institutions: applicationData.institutions.join('; '),
-            coverLetter: formData.coverLetter,
-            nationality: formData.nationality,
-            positionInterest: formData.positionInterest
-          },
-          photos: {
-            front: applicationData.docFront,
-            back: applicationData.docBack,
-            selfie: applicationData.selfie
-          }
-        };
-
-        console.log('Enviando candidatura:', submissionData.formData);
-
-        const response = await fetch(`${PYTHON_SERVER_URL}/submit`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(submissionData)
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Server error: ${response.status} - ${errorText}`);
-        }
-
-        const result = await response.json();
-        return result;
-
-      } catch (error) {
-        console.error('Erro ao enviar candidatura:', error);
-        return { success: false, message: error.message };
-      }
     }
 
     // Máscaras para os campos
     function applyMasks() {
-      // Máscara para CPF
-      const cpfInput = document.getElementById('cpf');
-      if (cpfInput) {
-        cpfInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          if (value.length > 3) {
-            value = value.substring(0, 3) + '.' + value.substring(3);
-          }
-          if (value.length > 7) {
-            value = value.substring(0, 7) + '.' + value.substring(7);
-          }
-          if (value.length > 11) {
-            value = value.substring(0, 11) + '-' + value.substring(11, 13);
-          }
-          e.target.value = value;
-        });
-      }
+        // Máscara para CPF
+        const cpfInput = document.getElementById('cpf');
+        if (cpfInput) {
+            cpfInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 3) {
+                    value = value.substring(0, 3) + '.' + value.substring(3);
+                }
+                if (value.length > 7) {
+                    value = value.substring(0, 7) + '.' + value.substring(7);
+                }
+                if (value.length > 11) {
+                    value = value.substring(0, 11) + '-' + value.substring(11, 13);
+                }
+                e.target.value = value;
+            });
+        }
 
-      // Máscara para SSN
-      const ssnInput = document.getElementById('ssn');
-      if (ssnInput) {
-        ssnInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          if (value.length > 3) {
-            value = value.substring(0, 3) + '-' + value.substring(3);
-          }
-          if (value.length > 6) {
-            value = value.substring(0, 6) + '-' + value.substring(6, 10);
-          }
-          e.target.value = value;
-        });
-      }
+        // Máscara para SSN
+        const ssnInput = document.getElementById('ssn');
+        if (ssnInput) {
+            ssnInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 3) {
+                    value = value.substring(0, 3) + '-' + value.substring(3);
+                }
+                if (value.length > 6) {
+                    value = value.substring(0, 6) + '-' + value.substring(6, 10);
+                }
+                e.target.value = value;
+            });
+        }
 
-      // Máscara para CEP
-      const zipcodeInput = document.getElementById('zipcode');
-      if (zipcodeInput) {
-        zipcodeInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          if (value.length > 5) {
-            value = value.substring(0, 5) + '-' + value.substring(5, 8);
-          }
-          e.target.value = value;
-        });
-      }
+        // Máscara para CEP
+        const zipcodeInput = document.getElementById('zipcode');
+        if (zipcodeInput) {
+            zipcodeInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 5) {
+                    value = value.substring(0, 5) + '-' + value.substring(5, 8);
+                }
+                e.target.value = value;
+            });
+        }
 
-      // Máscara para salário
-      const salaryInput = document.getElementById('currentSalary');
-      if (salaryInput) {
-        salaryInput.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/[^\d,]/g, '');
-          // Formata como moeda brasileira
-          if (value.length > 2) {
-            value = 'R$ ' + value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-          }
-          e.target.value = value;
+        // Máscara para salário
+        const salaryInput = document.getElementById('currentSalary');
+        if (salaryInput) {
+            salaryInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/[^\d,]/g, '');
+                // Formata como moeda brasileira
+                if (value.length > 2) {
+                    value = 'R$ ' + value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                }
+                e.target.value = value;
+            });
+        }
+    }
+
+    // Função de debug para verificar elementos
+    function debugUploadElements() {
+        console.log('=== DEBUG UPLOAD ELEMENTS ===');
+        
+        const elementsToCheck = [
+            { id: 'resume', type: 'input' },
+            { id: 'resume-upload', type: 'div' },
+            { id: 'resume-preview', type: 'preview' },
+            { id: 'docFront', type: 'input' },
+            { id: 'doc-front-upload', type: 'div' },
+            { id: 'doc-front-preview', type: 'preview' },
+            { id: 'docBack', type: 'input' },
+            { id: 'doc-back-upload', type: 'div' },
+            { id: 'doc-back-preview', type: 'preview' },
+            { id: 'selfie', type: 'input' },
+            { id: 'selfie-upload', type: 'div' },
+            { id: 'selfie-preview', type: 'preview' }
+        ];
+        
+        elementsToCheck.forEach(item => {
+            const element = document.getElementById(item.id);
+            console.log(`${item.id} (${item.type}):`, element ? 'EXISTS' : 'MISSING');
         });
-      }
+        
+        console.log('applicationData:', applicationData);
+        console.log('=== END DEBUG ===');
     }
 
     // Event Listeners
     document.addEventListener('DOMContentLoaded', function() {
-      const detectedLang = detectLanguage();
-      document.getElementById('language-select').value = detectedLang;
-      applyTranslations(detectedLang);
+        const detectedLang = detectLanguage();
+        document.getElementById('language-select').value = detectedLang;
+        applyTranslations(detectedLang);
 
-      // Aplicar máscaras
-      applyMasks();
+        // Aplicar máscaras
+        applyMasks();
 
-      // Configurar eventos
-      document.getElementById('language-select').addEventListener('change', function() {
-        applyTranslations(this.value);
-      });
-
-      countrySelect.addEventListener('change', function() {
-        showCountryFields(this.value);
-      });
-
-      // Navegação entre passos
-      nextButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
-          if (validateStep(currentStep)) {
-            showStep(currentStep + 1);
-          }
+        // Configurar eventos
+        document.getElementById('language-select').addEventListener('change', function() {
+            applyTranslations(this.value);
         });
-      });
 
-      prevButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
-          showStep(currentStep - 1);
+        countrySelect.addEventListener('change', function() {
+            showCountryFields(this.value);
         });
-      });
 
-      // Habilidades
-      addSkillBtn.addEventListener('click', addSkill);
-      skillInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          addSkill();
-        }
-      });
-
-      // Idiomas
-      addLanguageBtn.addEventListener('click', addLanguage);
-
-      // Instituições
-      addInstitutionBtn.addEventListener('click', addInstitution);
-      institutionInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          addInstitution();
-        }
-      });
-
-      // Upload de arquivos
-      document.getElementById('resume').addEventListener('change', (e) => {
-        handleFileUpload(e, 'resume');
-      });
-
-      document.getElementById('docFront').addEventListener('change', (e) => {
-        handleFileUpload(e, 'doc-front');
-      });
-
-      document.getElementById('docBack').addEventListener('change', (e) => {
-        handleFileUpload(e, 'doc-back');
-      });
-
-      document.getElementById('selfie').addEventListener('change', (e) => {
-        handleFileUpload(e, 'selfie');
-      });
-
-      // Configurar os file-upload para clicar no input file
-      ['resume', 'docFront', 'docBack', 'selfie'].forEach(docType => {
-        document.getElementById(`${docType}-upload`).addEventListener('click', () => {
-          document.getElementById(docType).click();
+        // Navegação entre passos
+        nextButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
+                if (validateStep(currentStep)) {
+                    showStep(currentStep + 1);
+                }
+            });
         });
-      });
 
-      // Opções de upload (Upload vs Câmera)
-      // Frente do documento
-      document.getElementById('upload-front-option').addEventListener('click', () => {
-        document.getElementById('upload-front-option').classList.add('active');
-        document.getElementById('camera-front-option').classList.remove('active');
-        document.getElementById('doc-front-upload').style.display = 'block';
-        document.getElementById('doc-front-camera').style.display = 'none';
-      });
+        prevButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currentStep = Array.from(steps).findIndex(step => step.classList.contains('active'));
+                showStep(currentStep - 1);
+            });
+        });
 
-      document.getElementById('camera-front-option').addEventListener('click', () => {
-        document.getElementById('camera-front-option').classList.add('active');
-        document.getElementById('upload-front-option').classList.remove('active');
-        document.getElementById('doc-front-upload').style.display = 'none';
-        document.getElementById('doc-front-camera').style.display = 'block';
-      });
+        // Habilidades
+        addSkillBtn.addEventListener('click', addSkill);
+        skillInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSkill();
+            }
+        });
 
-      // Verso do documento
-      document.getElementById('upload-back-option').addEventListener('click', () => {
-        document.getElementById('upload-back-option').classList.add('active');
-        document.getElementById('camera-back-option').classList.remove('active');
-        document.getElementById('doc-back-upload').style.display = 'block';
-        document.getElementById('doc-back-camera').style.display = 'none';
-      });
+        // Idiomas
+        addLanguageBtn.addEventListener('click', addLanguage);
 
-      document.getElementById('camera-back-option').addEventListener('click', () => {
-        document.getElementById('camera-back-option').classList.add('active');
-        document.getElementById('upload-back-option').classList.remove('active');
-        document.getElementById('doc-back-upload').style.display = 'none';
-        document.getElementById('doc-back-camera').style.display = 'block';
-      });
+        // Instituições
+        addInstitutionBtn.addEventListener('click', addInstitution);
+        institutionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addInstitution();
+            }
+        });
 
-      // Selfie
-      document.getElementById('upload-selfie-option').addEventListener('click', () => {
-        document.getElementById('upload-selfie-option').classList.add('active');
-        document.getElementById('camera-selfie-option').classList.remove('active');
-        document.getElementById('selfie-upload').style.display = 'block';
-        document.getElementById('selfie-camera').style.display = 'none';
-      });
+        // UPLOAD DE ARQUIVOS - EVENT LISTENERS CORRETOS
+        console.log('Configurando event listeners para upload...');
 
-      document.getElementById('camera-selfie-option').addEventListener('click', () => {
-        document.getElementById('camera-selfie-option').classList.add('active');
-        document.getElementById('upload-selfie-option').classList.remove('active');
-        document.getElementById('selfie-upload').style.display = 'none';
-        document.getElementById('selfie-camera').style.display = 'block';
-      });
-
-      // Botões da câmera
-      document.getElementById('doc-front-camera-btn').addEventListener('click', () => {
-        openCamera('doc-front');
-      });
-
-      document.getElementById('doc-back-camera-btn').addEventListener('click', () => {
-        openCamera('doc-back');
-      });
-
-      document.getElementById('selfie-camera-btn').addEventListener('click', () => {
-        openCamera('selfie');
-      });
-
-      // Controles da câmera
-      captureBtn.addEventListener('click', capturePhoto);
-      cancelCamera.addEventListener('click', () => {
-        stopCamera();
-        cameraModal.style.display = 'none';
-      });
-      switchCameraBtn.addEventListener('click', switchCamera);
-
-      // Envio do formulário
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        if (!validateStep(3)) {
-          return;
+        // Resume
+        const resumeInput = document.getElementById('resume');
+        const resumeUpload = document.getElementById('resume-upload');
+        if (resumeInput && resumeUpload) {
+            resumeInput.addEventListener('change', (e) => {
+                console.log('Resume file selected');
+                handleFileUpload(e, 'resume');
+            });
+            resumeUpload.addEventListener('click', () => {
+                console.log('Clicked resume upload area');
+                resumeInput.click();
+            });
         }
 
-        // Coletar dados do formulário
-        const formData = {
-          fullName: document.getElementById('fullName').value,
-          email: document.getElementById('email').value,
-          phone: document.getElementById('phone').value,
-          cellphone: document.getElementById('cellphone').value,
-          country: document.getElementById('country').value,
-          birthdate: document.getElementById('birthdate').value,
-          nationality: document.getElementById('nationality').value,
-          cpf: document.getElementById('cpf')?.value || '',
-          ssn: document.getElementById('ssn')?.value || '',
-          address: document.getElementById('address').value,
-          complement: document.getElementById('complement')?.value || '',
-          city: document.getElementById('city').value,
-          state: document.getElementById('state').value,
-          zipcode: document.getElementById('zipcode').value,
-          positionInterest: document.getElementById('positionInterest').value,
-          employmentStatus: document.getElementById('employmentStatus').value,
-          currentJob: document.getElementById('currentJob').value,
-          currentSalary: document.getElementById('currentSalary').value,
-          experience: document.getElementById('experience').value,
-          education: document.getElementById('education').value,
-          coverLetter: document.getElementById('coverLetter').value
-        };
-
-        // Mostrar loading
-        submitText.style.display = 'none';
-        submitLoading.style.display = 'inline-block';
-        submitButton.disabled = true;
-
-        // Enviar para o servidor
-        const result = await sendApplication(formData);
-
-        if (result && result.success) {
-          // Sucesso
-          form.style.display = 'none';
-          successMessage.style.display = 'block';
-          applicationId.textContent = result.applicationId || `GC${Date.now()}`;
-        } else {
-          // Erro
-          alert(result?.message || 'Erro ao enviar candidatura. Por favor, tente novamente.');
-          submitText.style.display = 'inline-block';
-          submitLoading.style.display = 'none';
-          submitButton.disabled = false;
+        // Documento Frente
+        const docFrontInput = document.getElementById('docFront');
+        const docFrontUpload = document.getElementById('doc-front-upload');
+        if (docFrontInput && docFrontUpload) {
+            docFrontInput.addEventListener('change', (e) => {
+                console.log('DocFront file selected');
+                handleFileUpload(e, 'docFront');
+            });
+            docFrontUpload.addEventListener('click', () => {
+                console.log('Clicked docFront upload area');
+                docFrontInput.click();
+            });
         }
-      });
+
+        // Documento Verso
+        const docBackInput = document.getElementById('docBack');
+        const docBackUpload = document.getElementById('doc-back-upload');
+        if (docBackInput && docBackUpload) {
+            docBackInput.addEventListener('change', (e) => {
+                console.log('DocBack file selected');
+                handleFileUpload(e, 'docBack');
+            });
+            docBackUpload.addEventListener('click', () => {
+                console.log('Clicked docBack upload area');
+                docBackInput.click();
+            });
+        }
+
+        // Selfie
+        const selfieInput = document.getElementById('selfie');
+        const selfieUpload = document.getElementById('selfie-upload');
+        if (selfieInput && selfieUpload) {
+            selfieInput.addEventListener('change', (e) => {
+                console.log('Selfie file selected');
+                handleFileUpload(e, 'selfie');
+            });
+            selfieUpload.addEventListener('click', () => {
+                console.log('Clicked selfie upload area');
+                selfieInput.click();
+            });
+        }
+
+        // Opções de upload (Upload vs Câmera)
+        // Frente do documento
+        document.getElementById('upload-front-option').addEventListener('click', () => {
+            document.getElementById('upload-front-option').classList.add('active');
+            document.getElementById('camera-front-option').classList.remove('active');
+            document.getElementById('doc-front-upload').style.display = 'block';
+            document.getElementById('doc-front-camera').style.display = 'none';
+        });
+
+        document.getElementById('camera-front-option').addEventListener('click', () => {
+            document.getElementById('camera-front-option').classList.add('active');
+            document.getElementById('upload-front-option').classList.remove('active');
+            document.getElementById('doc-front-upload').style.display = 'none';
+            document.getElementById('doc-front-camera').style.display = 'block';
+        });
+
+        // Verso do documento
+        document.getElementById('upload-back-option').addEventListener('click', () => {
+            document.getElementById('upload-back-option').classList.add('active');
+            document.getElementById('camera-back-option').classList.remove('active');
+            document.getElementById('doc-back-upload').style.display = 'block';
+            document.getElementById('doc-back-camera').style.display = 'none';
+        });
+
+        document.getElementById('camera-back-option').addEventListener('click', () => {
+            document.getElementById('camera-back-option').classList.add('active');
+            document.getElementById('upload-back-option').classList.remove('active');
+            document.getElementById('doc-back-upload').style.display = 'none';
+            document.getElementById('doc-back-camera').style.display = 'block';
+        });
+
+        // Selfie
+        document.getElementById('upload-selfie-option').addEventListener('click', () => {
+            document.getElementById('upload-selfie-option').classList.add('active');
+            document.getElementById('camera-selfie-option').classList.remove('active');
+            document.getElementById('selfie-upload').style.display = 'block';
+            document.getElementById('selfie-camera').style.display = 'none';
+        });
+
+        document.getElementById('camera-selfie-option').addEventListener('click', () => {
+            document.getElementById('camera-selfie-option').classList.add('active');
+            document.getElementById('upload-selfie-option').classList.remove('active');
+            document.getElementById('selfie-upload').style.display = 'none';
+            document.getElementById('selfie-camera').style.display = 'block';
+        });
+
+        // Botões da câmera
+        document.getElementById('doc-front-camera-btn').addEventListener('click', () => {
+            openCamera('docFront');
+        });
+
+        document.getElementById('doc-back-camera-btn').addEventListener('click', () => {
+            openCamera('docBack');
+        });
+
+        document.getElementById('selfie-camera-btn').addEventListener('click', () => {
+            openCamera('selfie');
+        });
+
+        // Controles da câmera
+        captureBtn.addEventListener('click', capturePhoto);
+        cancelCamera.addEventListener('click', () => {
+            stopCamera();
+            cameraModal.style.display = 'none';
+        });
+        switchCameraBtn.addEventListener('click', switchCamera);
+
+        // Envio do formulário
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!validateStep(3)) {
+                return;
+            }
+
+            // Coletar dados do formulário
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                cellphone: document.getElementById('cellphone').value,
+                country: document.getElementById('country').value,
+                birthdate: document.getElementById('birthdate').value,
+                nationality: document.getElementById('nationality').value,
+                cpf: document.getElementById('cpf')?.value || '',
+                ssn: document.getElementById('ssn')?.value || '',
+                address: document.getElementById('address').value,
+                complement: document.getElementById('complement')?.value || '',
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zipcode: document.getElementById('zipcode').value,
+                positionInterest: document.getElementById('positionInterest').value,
+                employmentStatus: document.getElementById('employmentStatus').value,
+                currentJob: document.getElementById('currentJob').value,
+                currentSalary: document.getElementById('currentSalary').value,
+                experience: document.getElementById('experience').value,
+                education: document.getElementById('education').value,
+                coverLetter: document.getElementById('coverLetter').value
+            };
+
+            // Mostrar loading
+            submitText.style.display = 'none';
+            submitLoading.style.display = 'inline-block';
+            submitButton.disabled = true;
+
+            // Enviar para o servidor
+            const result = await sendApplication(formData);
+
+            if (result && result.success) {
+                // Sucesso
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                applicationId.textContent = result.applicationId || `GC${Date.now()}`;
+            } else {
+                // Erro
+                alert(result?.message || 'Erro ao enviar candidatura. Por favor, tente novamente.');
+                submitText.style.display = 'inline-block';
+                submitLoading.style.display = 'none';
+                submitButton.disabled = false;
+            }
+        });
+
+        // Debug
+        setTimeout(debugUploadElements, 1000);
     });
 
     // Expor funções globalmente para os event listeners
